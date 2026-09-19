@@ -46,8 +46,12 @@ jobs:
           paths: "/fixture/pricing/ /fixture/blocked/ /fixture/noindex/"
           comment: "false"
           source: local
-      - name: Assert the gate failed
-        if: steps.gate.outcome != 'failure'
+      - name: Assert the gate itself reported the failure
+        if: steps.gate.outcome != 'failure' || steps.gate.outputs.failed != 'true'
+        env:
+          OUTCOME: ${{ steps.gate.outcome }}
+          FAILED: ${{ steps.gate.outputs.failed }}
+          REGRESSIONS: ${{ steps.gate.outputs.regressions }}
         run: |
-          echo "Expected the broken fixture pages to fail the gate" >&2
+          echo "Expected the gate to fail on the broken fixture pages: outcome=$OUTCOME failed=$FAILED regressions=$REGRESSIONS" >&2
           exit 1

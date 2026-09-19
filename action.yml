@@ -17,7 +17,7 @@ inputs:
     required: false
     default: "true"
   headers:
-    description: "Newline-separated extra request headers, e.g. 'x-vercel-protection-bypass: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}'."
+    description: "Newline-separated extra request headers, one 'Name: value' per line. Put a preview-deploy bypass token here from a repository secret; see docs/ci-setup.md."
     required: false
   update-baseline:
     description: "Write .ai-readable/baseline.json and badge.json from this run (do this on your main branch, then commit)."
