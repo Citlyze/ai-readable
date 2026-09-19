@@ -1,0 +1,347 @@
+{
+  "schemaVersion": 1,
+  "tool": {
+    "name": "ai-readable",
+    "version": "0.1.0"
+  },
+  "url": "https://www.notion.com/pricing",
+  "finalUrl": "https://www.notion.com/pricing",
+  "fetchedAt": "2026-09-19T18:58:58.040Z",
+  "httpStatus": 200,
+  "fetchError": null,
+  "score": 53,
+  "checks": [
+    {
+      "id": "crawlerAccess",
+      "label": "AI crawler access",
+      "status": "fail",
+      "points": 0,
+      "max": 25,
+      "detail": "Blocked in robots.txt: Amazonbot."
+    },
+    {
+      "id": "indexable",
+      "label": "Reachable and indexable",
+      "status": "pass",
+      "points": 15,
+      "max": 15,
+      "detail": "HTTP 200, no noindex directive."
+    },
+    {
+      "id": "singleH1",
+      "label": "One descriptive H1",
+      "status": "pass",
+      "points": 10,
+      "max": 10,
+      "detail": "H1: \"One tool to run your company.\"."
+    },
+    {
+      "id": "questionHeadings",
+      "label": "Question-shaped headings",
+      "status": "fail",
+      "points": 0,
+      "max": 12,
+      "detail": "0 of 10 subheadings are questions."
+    },
+    {
+      "id": "answerBlocks",
+      "label": "Liftable answer blocks",
+      "status": "pass",
+      "points": 15,
+      "max": 15,
+      "detail": "2 headings followed by a 25 to 90 word paragraph."
+    },
+    {
+      "id": "structuredData",
+      "label": "Entity structured data",
+      "status": "warn",
+      "points": 0,
+      "max": 10,
+      "detail": "No JSON-LD entity markup."
+    },
+    {
+      "id": "extractableFormats",
+      "label": "Tables and lists",
+      "status": "pass",
+      "points": 8,
+      "max": 8,
+      "detail": "0 tables, 113 list items."
+    },
+    {
+      "id": "titleAndDescription",
+      "label": "Title and meta description",
+      "status": "pass",
+      "points": 5,
+      "max": 5,
+      "detail": "Title 57 chars, description 120 chars."
+    },
+    {
+      "id": "llmsTxt",
+      "label": "llms.txt",
+      "status": "info",
+      "points": 0,
+      "max": 0,
+      "detail": "llms.txt found. Not scored: no major engine documents reading it."
+    }
+  ],
+  "bots": [
+    {
+      "id": "oai-searchbot",
+      "name": "OAI-SearchBot",
+      "organization": "OpenAI",
+      "category": "search-index",
+      "allowed": true,
+      "token": "OAI-SearchBot",
+      "rule": "Allow: /",
+      "line": 2,
+      "docs": "https://platform.openai.com/docs/bots"
+    },
+    {
+      "id": "chatgpt-user",
+      "name": "ChatGPT-User",
+      "organization": "OpenAI",
+      "category": "assistant-fetch",
+      "allowed": true,
+      "token": "ChatGPT-User",
+      "rule": "Allow: /",
+      "line": 2,
+      "docs": "https://platform.openai.com/docs/bots"
+    },
+    {
+      "id": "gptbot",
+      "name": "GPTBot",
+      "organization": "OpenAI",
+      "category": "training",
+      "allowed": true,
+      "token": "GPTBot",
+      "rule": "Allow: /",
+      "line": 2,
+      "docs": "https://platform.openai.com/docs/bots"
+    },
+    {
+      "id": "claude-searchbot",
+      "name": "Claude-SearchBot",
+      "organization": "Anthropic",
+      "category": "search-index",
+      "allowed": true,
+      "token": "Claude-SearchBot",
+      "rule": "Allow: /",
+      "line": 2,
+      "docs": "https://support.anthropic.com/en/articles/8896518-does-anthropic-crawl-data-from-the-web-and-how-can-site-owners-block-the-crawler"
+    },
+    {
+      "id": "claude-user",
+      "name": "Claude-User",
+      "organization": "Anthropic",
+      "category": "assistant-fetch",
+      "allowed": true,
+      "token": "Claude-User",
+      "rule": "Allow: /",
+      "line": 2,
+      "docs": "https://support.anthropic.com/en/articles/8896518-does-anthropic-crawl-data-from-the-web-and-how-can-site-owners-block-the-crawler"
+    },
+    {
+      "id": "claudebot",
+      "name": "ClaudeBot",
+      "organization": "Anthropic",
+      "category": "training",
+      "allowed": true,
+      "token": "ClaudeBot",
+      "rule": "Allow: /",
+      "line": 2,
+      "docs": "https://support.anthropic.com/en/articles/8896518-does-anthropic-crawl-data-from-the-web-and-how-can-site-owners-block-the-crawler"
+    },
+    {
+      "id": "perplexitybot",
+      "name": "PerplexityBot",
+      "organization": "Perplexity",
+      "category": "search-index",
+      "allowed": true,
+      "token": "PerplexityBot",
+      "rule": "Allow: /",
+      "line": 2,
+      "docs": "https://docs.perplexity.ai/guides/bots"
+    },
+    {
+      "id": "perplexity-user",
+      "name": "Perplexity-User",
+      "organization": "Perplexity",
+      "category": "assistant-fetch",
+      "allowed": true,
+      "token": "Perplexity-User",
+      "rule": "Allow: /",
+      "line": 2,
+      "docs": "https://docs.perplexity.ai/guides/bots"
+    },
+    {
+      "id": "googlebot",
+      "name": "Googlebot",
+      "organization": "Google",
+      "category": "search-index",
+      "allowed": true,
+      "token": "Googlebot",
+      "rule": "Allow: /",
+      "line": 2,
+      "docs": "https://developers.google.com/search/docs/crawling-indexing/overview-google-crawlers"
+    },
+    {
+      "id": "google-extended",
+      "name": "Google-Extended",
+      "organization": "Google",
+      "category": "training",
+      "allowed": true,
+      "token": "Google-Extended",
+      "rule": "Allow: /",
+      "line": 2,
+      "docs": "https://developers.google.com/search/docs/crawling-indexing/overview-google-crawlers"
+    },
+    {
+      "id": "bingbot",
+      "name": "Bingbot",
+      "organization": "Microsoft",
+      "category": "search-index",
+      "allowed": true,
+      "token": "Bingbot",
+      "rule": "Allow: /",
+      "line": 2,
+      "docs": "https://www.bing.com/webmasters/help/which-crawlers-does-bing-use-8c184ec0"
+    },
+    {
+      "id": "applebot",
+      "name": "Applebot",
+      "organization": "Apple",
+      "category": "search-index",
+      "allowed": true,
+      "token": "Applebot",
+      "rule": "Allow: /",
+      "line": 2,
+      "docs": "https://support.apple.com/en-us/119829"
+    },
+    {
+      "id": "applebot-extended",
+      "name": "Applebot-Extended",
+      "organization": "Apple",
+      "category": "training",
+      "allowed": true,
+      "token": "Applebot-Extended",
+      "rule": "Allow: /",
+      "line": 2,
+      "docs": "https://support.apple.com/en-us/119829"
+    },
+    {
+      "id": "meta-externalfetcher",
+      "name": "Meta-ExternalFetcher",
+      "organization": "Meta",
+      "category": "assistant-fetch",
+      "allowed": true,
+      "token": "Meta-ExternalFetcher",
+      "rule": "Allow: /",
+      "line": 2,
+      "docs": "https://developers.facebook.com/docs/sharing/webmasters/web-crawlers"
+    },
+    {
+      "id": "meta-externalagent",
+      "name": "Meta-ExternalAgent",
+      "organization": "Meta",
+      "category": "training",
+      "allowed": false,
+      "token": "Meta-ExternalAgent",
+      "rule": "Disallow: /",
+      "line": 27,
+      "docs": "https://developers.facebook.com/docs/sharing/webmasters/web-crawlers"
+    },
+    {
+      "id": "amazonbot",
+      "name": "Amazonbot",
+      "organization": "Amazon",
+      "category": "search-index",
+      "allowed": false,
+      "token": "Amazonbot",
+      "rule": "Disallow: /",
+      "line": 21,
+      "docs": "https://developer.amazon.com/amazonbot"
+    },
+    {
+      "id": "duckassistbot",
+      "name": "DuckAssistBot",
+      "organization": "DuckDuckGo",
+      "category": "assistant-fetch",
+      "allowed": true,
+      "token": "DuckAssistBot",
+      "rule": "Allow: /",
+      "line": 2,
+      "docs": "https://duckduckgo.com/duckduckgo-help-pages/results/duckassistbot"
+    },
+    {
+      "id": "mistralai-user",
+      "name": "MistralAI-User",
+      "organization": "Mistral AI",
+      "category": "assistant-fetch",
+      "allowed": true,
+      "token": "MistralAI-User",
+      "rule": "Allow: /",
+      "line": 2,
+      "docs": "https://docs.mistral.ai/robots"
+    },
+    {
+      "id": "ccbot",
+      "name": "CCBot",
+      "organization": "Common Crawl",
+      "category": "training",
+      "allowed": true,
+      "token": "CCBot",
+      "rule": "Allow: /",
+      "line": 2,
+      "docs": "https://commoncrawl.org/ccbot"
+    }
+  ],
+  "robotsTxt": {
+    "found": true,
+    "sitemaps": [
+      "https://www.notion.com/sitemap.xml",
+      "https://sitemaps.notion.com/sitemap-categories.xml",
+      "https://sitemaps.notion.com/sitemap-collections.xml",
+      "https://www.notion.com/sitemap-root.xml",
+      "https://www.notion.com/blog/sitemap.xml",
+      "https://www.notion.com/customers/sitemap.xml",
+      "https://www.notion.com/help/sitemap.xml",
+      "https://www.notion.com/md/sitemap.xml",
+      "https://www.notion.com/releases/sitemap.xml",
+      "https://www.notion.com/use-case/sitemap.xml",
+      "https://www.notion.com/feature/sitemap.xml",
+      "https://www.notion.com/front-static/sitemap.xml"
+    ]
+  },
+  "llmsTxt": {
+    "found": true
+  },
+  "gap": null,
+  "renderError": null,
+  "facts": {
+    "title": "Notion Pricing Plans: Free, Plus, Business, & Enterprise.",
+    "metaDescription": "Learn more about our different pricing plans. We support everyone, from free personal accounts to enterprise businesses.",
+    "robotsMeta": "",
+    "h1s": [
+      "One tool to run your company."
+    ],
+    "subheadings": [
+      "Essentials for staying organized.",
+      "Free",
+      "Plus",
+      "The AI workspace for work that matters.",
+      "BusinessRecommended",
+      "Enterprise",
+      "Custom Agents",
+      "WorkersBeta",
+      "Plans and features",
+      "Questions & answers"
+    ],
+    "answerBlocks": 2,
+    "ldTypes": [],
+    "tables": 0,
+    "listItems": 113,
+    "wordCount": 3637,
+    "canonical": "https://www.notion.com/pricing",
+    "lang": "en-us"
+  }
+}

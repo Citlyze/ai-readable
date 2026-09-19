@@ -1,0 +1,26 @@
+{
+  "name": "ai-readable",
+  "owner": {
+    "name": "Citlyze",
+    "email": "hello@citlyze.com"
+  },
+  "metadata": {
+    "description": "AI readability checks and CI gate for websites.",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "ai-readable",
+      "source": "./",
+      "description": "Check what each AI crawler gets from a page, fix it with a framework recipe, and gate CI on regressions.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Citlyze"
+      },
+      "homepage": "https://github.com/Citlyze/ai-readable",
+      "license": "MIT",
+      "keywords": ["ai-search", "aeo", "geo", "robots.txt", "ci", "seo"],
+      "category": "productivity"
+    }
+  ]
+}

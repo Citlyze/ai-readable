@@ -1,0 +1,13 @@
+# Demo robots.txt for the ai-readable fixture site.
+User-agent: *
+Allow: /
+
+# Blocking a training bot does not change what live answers can cite.
+User-agent: GPTBot
+Disallow: /
+
+# Blocking a search-index bot removes the path from ChatGPT search.
+User-agent: OAI-SearchBot
+Disallow: /blocked/
+
+Sitemap: https://citlyze.github.io/ai-readable/sitemap.xml

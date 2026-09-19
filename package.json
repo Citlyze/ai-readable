@@ -1,0 +1,85 @@
+{
+  "name": "ai-readable",
+  "version": "0.1.0",
+  "description": "See what each AI crawler actually gets from your pages, and fail CI when a deploy makes a page unreadable to AI search.",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "ai-readable": "./dist/cli.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "action.yml",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsx src/cli.ts",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "pnpm typecheck && pnpm test && pnpm build",
+    "examples": "node scripts/examples.mjs"
+  },
+  "keywords": [
+    "ai-search",
+    "aeo",
+    "geo",
+    "robots.txt",
+    "ai-crawlers",
+    "ci",
+    "github-action",
+    "seo",
+    "llm",
+    "chatgpt",
+    "perplexity",
+    "claude"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Citlyze/ai-readable.git"
+  },
+  "homepage": "https://github.com/Citlyze/ai-readable#readme",
+  "bugs": {
+    "url": "https://github.com/Citlyze/ai-readable/issues"
+  },
+  "author": "Citlyze <hello@citlyze.com> (https://www.citlyze.com)",
+  "dependencies": {
+    "cheerio": "^1.2.0",
+    "commander": "^15.0.0",
+    "picocolors": "^1.1.1",
+    "robots-parser": "^3.0.1"
+  },
+  "peerDependencies": {
+    "@resvg/resvg-js": "^2.6.2",
+    "playwright": "^1.50.0"
+  },
+  "peerDependenciesMeta": {
+    "@resvg/resvg-js": {
+      "optional": true
+    },
+    "playwright": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@resvg/resvg-js": "^2.6.2",
+    "@types/node": "^22.0.0",
+    "playwright": "^1.63.0",
+    "tsup": "^8.5.1",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.0",
+    "vitest": "^5.0.1"
+  }
+}

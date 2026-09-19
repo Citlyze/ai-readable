@@ -1,0 +1,50 @@
+name: Self-check
+
+# Runs this repository's own Action against the fixture site published on
+# GitHub Pages. Proves a green run on the good pages and a red run on the
+# broken ones, so the README's before/after is always real.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "17 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+env:
+  FIXTURE_URL: https://citlyze.github.io/ai-readable
+
+jobs:
+  good-pages:
+    name: Good pages stay green
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./
+        with:
+          base-url: ${{ env.FIXTURE_URL }}
+          paths: "/ /fixed/pricing/"
+          comment: "false"
+
+  broken-pages:
+    name: Broken pages go red
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - id: gate
+        uses: ./
+        continue-on-error: true
+        with:
+          base-url: ${{ env.FIXTURE_URL }}
+          paths: "/pricing/ /blocked/ /noindex/"
+          comment: "false"
+      - name: Assert the gate failed
+        if: steps.gate.outcome != 'failure'
+        run: |
+          echo "Expected the broken fixture pages to fail the gate" >&2
+          exit 1

@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/Citlyze/ai-readable/main/docs/config.schema.json",
+  "title": "ai-readable config",
+  "type": "object",
+  "required": ["paths"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "baseUrl": {
+      "type": "string",
+      "description": "Origin the paths are resolved against. CI usually overrides it with the preview URL."
+    },
+    "paths": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string" },
+      "description": "Paths to gate, for example [\"/\", \"/pricing\"]. Full URLs are accepted too."
+    },
+    "render": {
+      "type": "boolean",
+      "default": true,
+      "description": "Compare the initial HTML with the page after JavaScript ran (needs Chromium)."
+    },
+    "headers": {
+      "type": "object",
+      "additionalProperties": { "type": "string" },
+      "description": "Extra request headers, for example a preview-deploy bypass token."
+    },
+    "timeoutMs": { "type": "integer", "minimum": 1000, "default": 8000 },
+    "rules": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "maxScoreDrop": { "type": "integer", "minimum": 0, "default": 5 },
+        "checkRegression": { "type": "boolean", "default": true },
+        "botBlocked": { "type": "boolean", "default": true },
+        "gapRegression": { "type": "boolean", "default": true },
+        "indexable": { "type": "boolean", "default": true }
+      }
+    }
+  }
+}

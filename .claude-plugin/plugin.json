@@ -1,0 +1,15 @@
+{
+  "name": "ai-readable",
+  "version": "0.1.0",
+  "description": "Make a page readable to AI search and keep it that way: per-bot robots.txt access, noindex leaks, content hidden behind JavaScript, with a CI gate.",
+  "author": {
+    "name": "Citlyze",
+    "email": "hello@citlyze.com",
+    "url": "https://www.citlyze.com"
+  },
+  "homepage": "https://github.com/Citlyze/ai-readable",
+  "repository": "https://github.com/Citlyze/ai-readable",
+  "license": "MIT",
+  "keywords": ["ai-search", "aeo", "geo", "robots.txt", "ci", "seo"],
+  "skills": ["./skills"]
+}

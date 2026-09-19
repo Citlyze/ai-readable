@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Pricing</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+  <div id="root">Loading…</div>
+  <script>
+    // What a client-rendered pricing page looks like to a crawler that does not run JavaScript.
+    document.getElementById("root").innerHTML = `
+      <h1>Acme Widget Pro pricing plans</h1>
+      <h2>How much does the Acme Widget Pro cost?</h2>
+      <p>The base model costs 129 dollars and the extended-battery model costs 199 dollars. Both include a two-year warranty, free shipping inside the country, and a thirty-day return window with no restocking fee for unused units.</p>
+      <h2>Which plan is right for a small workshop?</h2>
+      <p>Most workshops pick the base model because it covers a full shift on mains power. Choose the extended battery only if you work off-grid for more than six hours at a time, since it adds weight and cost you will not otherwise use.</p>
+      <table><tr><th>Plan</th><th>Price</th></tr><tr><td>Base</td><td>$129</td></tr><tr><td>Extended</td><td>$199</td></tr></table>
+    `;
+  </script>
+</body>
+</html>

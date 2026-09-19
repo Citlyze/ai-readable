@@ -1,0 +1,17 @@
+export { auditUrl, REPORT_SCHEMA_VERSION } from "./engine/audit";
+export type { AuditOptions, BotRow, PageReport } from "./engine/audit";
+export { BOTS, CATEGORY_INFO, RETRIEVAL_CATEGORIES, botsByCategory, isRetrievalBot } from "./engine/bots";
+export type { Bot, BotCategory } from "./engine/bots";
+export { runChecks, isQuestion, CHECK_LABELS, STATUS_RANK } from "./engine/checks";
+export type { Check, CheckId, CheckStatus, ChecksInput, ChecksResult } from "./engine/checks";
+export { extractPageFacts, ldTypeValues, words, ANSWER_MIN_WORDS, ANSWER_MAX_WORDS } from "./engine/extract";
+export type { PageFacts } from "./engine/extract";
+export { compareStaticVsRendered, WORD_RATIO_WARN, WORD_RATIO_FAIL } from "./engine/gap";
+export type { RenderGap, GapStatus } from "./engine/gap";
+export { evaluateBots, sitemapsIn } from "./engine/robots";
+export type { BotVerdict } from "./engine/robots";
+export { fetchText, normalizeUrl, USER_AGENT } from "./engine/fetch";
+export type { FetchResult, FetchOptions } from "./engine/fetch";
+export { renderPage, RENDER_HINT } from "./engine/render";
+export { diffReports, DEFAULT_RULES } from "./cli/diff";
+export type { DiffResult, DiffRules, Regression, RuleOverrides } from "./cli/diff";

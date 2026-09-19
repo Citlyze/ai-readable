@@ -1,0 +1,338 @@
+{
+  "schemaVersion": 1,
+  "tool": {
+    "name": "ai-readable",
+    "version": "0.1.0"
+  },
+  "url": "https://www.atlassian.com/software/jira/pricing",
+  "finalUrl": "https://www.atlassian.com/software/jira/pricing",
+  "fetchedAt": "2026-09-19T18:59:06.104Z",
+  "httpStatus": 200,
+  "fetchError": null,
+  "score": 55,
+  "checks": [
+    {
+      "id": "crawlerAccess",
+      "label": "AI crawler access",
+      "status": "pass",
+      "points": 25,
+      "max": 25,
+      "detail": "No search or assistant bots are blocked for this path."
+    },
+    {
+      "id": "indexable",
+      "label": "Reachable and indexable",
+      "status": "pass",
+      "points": 15,
+      "max": 15,
+      "detail": "HTTP 200, no noindex directive."
+    },
+    {
+      "id": "singleH1",
+      "label": "One descriptive H1",
+      "status": "fail",
+      "points": 0,
+      "max": 10,
+      "detail": "No H1 in the HTML."
+    },
+    {
+      "id": "questionHeadings",
+      "label": "Question-shaped headings",
+      "status": "fail",
+      "points": 0,
+      "max": 12,
+      "detail": "No H2 or H3 subheadings in the HTML."
+    },
+    {
+      "id": "answerBlocks",
+      "label": "Liftable answer blocks",
+      "status": "fail",
+      "points": 0,
+      "max": 15,
+      "detail": "0 headings followed by a 25 to 90 word paragraph."
+    },
+    {
+      "id": "structuredData",
+      "label": "Entity structured data",
+      "status": "pass",
+      "points": 10,
+      "max": 10,
+      "detail": "JSON-LD: organization, product, softwareapplication, breadcrumblist."
+    },
+    {
+      "id": "extractableFormats",
+      "label": "Tables and lists",
+      "status": "warn",
+      "points": 0,
+      "max": 8,
+      "detail": "No tables and fewer than three list items. Comparative facts lift better from tables."
+    },
+    {
+      "id": "titleAndDescription",
+      "label": "Title and meta description",
+      "status": "pass",
+      "points": 5,
+      "max": 5,
+      "detail": "Title 61 chars, description 151 chars."
+    },
+    {
+      "id": "llmsTxt",
+      "label": "llms.txt",
+      "status": "info",
+      "points": 0,
+      "max": 0,
+      "detail": "llms.txt found. Not scored: no major engine documents reading it."
+    }
+  ],
+  "bots": [
+    {
+      "id": "oai-searchbot",
+      "name": "OAI-SearchBot",
+      "organization": "OpenAI",
+      "category": "search-index",
+      "allowed": true,
+      "token": "OAI-SearchBot",
+      "rule": null,
+      "line": null,
+      "docs": "https://platform.openai.com/docs/bots"
+    },
+    {
+      "id": "chatgpt-user",
+      "name": "ChatGPT-User",
+      "organization": "OpenAI",
+      "category": "assistant-fetch",
+      "allowed": true,
+      "token": "ChatGPT-User",
+      "rule": null,
+      "line": null,
+      "docs": "https://platform.openai.com/docs/bots"
+    },
+    {
+      "id": "gptbot",
+      "name": "GPTBot",
+      "organization": "OpenAI",
+      "category": "training",
+      "allowed": true,
+      "token": "GPTBot",
+      "rule": null,
+      "line": null,
+      "docs": "https://platform.openai.com/docs/bots"
+    },
+    {
+      "id": "claude-searchbot",
+      "name": "Claude-SearchBot",
+      "organization": "Anthropic",
+      "category": "search-index",
+      "allowed": true,
+      "token": "Claude-SearchBot",
+      "rule": null,
+      "line": null,
+      "docs": "https://support.anthropic.com/en/articles/8896518-does-anthropic-crawl-data-from-the-web-and-how-can-site-owners-block-the-crawler"
+    },
+    {
+      "id": "claude-user",
+      "name": "Claude-User",
+      "organization": "Anthropic",
+      "category": "assistant-fetch",
+      "allowed": true,
+      "token": "Claude-User",
+      "rule": null,
+      "line": null,
+      "docs": "https://support.anthropic.com/en/articles/8896518-does-anthropic-crawl-data-from-the-web-and-how-can-site-owners-block-the-crawler"
+    },
+    {
+      "id": "claudebot",
+      "name": "ClaudeBot",
+      "organization": "Anthropic",
+      "category": "training",
+      "allowed": true,
+      "token": "ClaudeBot",
+      "rule": null,
+      "line": null,
+      "docs": "https://support.anthropic.com/en/articles/8896518-does-anthropic-crawl-data-from-the-web-and-how-can-site-owners-block-the-crawler"
+    },
+    {
+      "id": "perplexitybot",
+      "name": "PerplexityBot",
+      "organization": "Perplexity",
+      "category": "search-index",
+      "allowed": true,
+      "token": "PerplexityBot",
+      "rule": null,
+      "line": null,
+      "docs": "https://docs.perplexity.ai/guides/bots"
+    },
+    {
+      "id": "perplexity-user",
+      "name": "Perplexity-User",
+      "organization": "Perplexity",
+      "category": "assistant-fetch",
+      "allowed": true,
+      "token": "Perplexity-User",
+      "rule": null,
+      "line": null,
+      "docs": "https://docs.perplexity.ai/guides/bots"
+    },
+    {
+      "id": "googlebot",
+      "name": "Googlebot",
+      "organization": "Google",
+      "category": "search-index",
+      "allowed": true,
+      "token": "Googlebot",
+      "rule": null,
+      "line": null,
+      "docs": "https://developers.google.com/search/docs/crawling-indexing/overview-google-crawlers"
+    },
+    {
+      "id": "google-extended",
+      "name": "Google-Extended",
+      "organization": "Google",
+      "category": "training",
+      "allowed": true,
+      "token": "Google-Extended",
+      "rule": null,
+      "line": null,
+      "docs": "https://developers.google.com/search/docs/crawling-indexing/overview-google-crawlers"
+    },
+    {
+      "id": "bingbot",
+      "name": "Bingbot",
+      "organization": "Microsoft",
+      "category": "search-index",
+      "allowed": true,
+      "token": "Bingbot",
+      "rule": null,
+      "line": null,
+      "docs": "https://www.bing.com/webmasters/help/which-crawlers-does-bing-use-8c184ec0"
+    },
+    {
+      "id": "applebot",
+      "name": "Applebot",
+      "organization": "Apple",
+      "category": "search-index",
+      "allowed": true,
+      "token": "Applebot",
+      "rule": null,
+      "line": null,
+      "docs": "https://support.apple.com/en-us/119829"
+    },
+    {
+      "id": "applebot-extended",
+      "name": "Applebot-Extended",
+      "organization": "Apple",
+      "category": "training",
+      "allowed": true,
+      "token": "Applebot-Extended",
+      "rule": null,
+      "line": null,
+      "docs": "https://support.apple.com/en-us/119829"
+    },
+    {
+      "id": "meta-externalfetcher",
+      "name": "Meta-ExternalFetcher",
+      "organization": "Meta",
+      "category": "assistant-fetch",
+      "allowed": true,
+      "token": "Meta-ExternalFetcher",
+      "rule": null,
+      "line": null,
+      "docs": "https://developers.facebook.com/docs/sharing/webmasters/web-crawlers"
+    },
+    {
+      "id": "meta-externalagent",
+      "name": "Meta-ExternalAgent",
+      "organization": "Meta",
+      "category": "training",
+      "allowed": true,
+      "token": "Meta-ExternalAgent",
+      "rule": null,
+      "line": null,
+      "docs": "https://developers.facebook.com/docs/sharing/webmasters/web-crawlers"
+    },
+    {
+      "id": "amazonbot",
+      "name": "Amazonbot",
+      "organization": "Amazon",
+      "category": "search-index",
+      "allowed": true,
+      "token": "Amazonbot",
+      "rule": null,
+      "line": null,
+      "docs": "https://developer.amazon.com/amazonbot"
+    },
+    {
+      "id": "duckassistbot",
+      "name": "DuckAssistBot",
+      "organization": "DuckDuckGo",
+      "category": "assistant-fetch",
+      "allowed": true,
+      "token": "DuckAssistBot",
+      "rule": null,
+      "line": null,
+      "docs": "https://duckduckgo.com/duckduckgo-help-pages/results/duckassistbot"
+    },
+    {
+      "id": "mistralai-user",
+      "name": "MistralAI-User",
+      "organization": "Mistral AI",
+      "category": "assistant-fetch",
+      "allowed": true,
+      "token": "MistralAI-User",
+      "rule": null,
+      "line": null,
+      "docs": "https://docs.mistral.ai/robots"
+    },
+    {
+      "id": "ccbot",
+      "name": "CCBot",
+      "organization": "Common Crawl",
+      "category": "training",
+      "allowed": true,
+      "token": "CCBot",
+      "rule": null,
+      "line": null,
+      "docs": "https://commoncrawl.org/ccbot"
+    }
+  ],
+  "robotsTxt": {
+    "found": true,
+    "sitemaps": [
+      "https://www.atlassian.com/sitemap.xml",
+      "https://www.atlassian.com/blog/post-sitemap.xml"
+    ]
+  },
+  "llmsTxt": {
+    "found": true
+  },
+  "gap": null,
+  "renderError": null,
+  "facts": {
+    "title": "Jira pricing: Free, Standard, Premium, Enterprise | Atlassian",
+    "metaDescription": "Compare Jira plans and pricing. Every paid plan includes AI agents that plan, track, and move work forward, built in and ready to scale with your team.",
+    "robotsMeta": "",
+    "h1s": [],
+    "subheadings": [],
+    "answerBlocks": 0,
+    "ldTypes": [
+      "organization",
+      "website",
+      "webpage",
+      "readaction",
+      "product",
+      "offer",
+      "unitpricespecification",
+      "quantitativevalue",
+      "viewaction",
+      "softwareapplication",
+      "aggregaterating",
+      "breadcrumblist",
+      "listitem"
+    ],
+    "tables": 0,
+    "listItems": 0,
+    "wordCount": 0,
+    "canonical": "https://www.atlassian.com/software/jira/pricing",
+    "lang": "en"
+  }
+}

@@ -1,0 +1,105 @@
+name: "ai-readable"
+description: "Fail CI when a deploy makes a page unreadable to AI search: robots.txt access per AI crawler, noindex leaks, and content that only exists after JavaScript."
+author: "Citlyze"
+branding:
+  icon: "eye"
+  color: "green"
+
+inputs:
+  base-url:
+    description: "Origin the configured paths are resolved against (production URL or the preview deployment URL)."
+    required: false
+  paths:
+    description: "Space-separated paths or URLs to check. Overrides ai-readable.config.json."
+    required: false
+  render:
+    description: "Load each page in headless Chromium and compare with the initial HTML."
+    required: false
+    default: "true"
+  headers:
+    description: "Newline-separated extra request headers, e.g. 'x-vercel-protection-bypass: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}'."
+    required: false
+  update-baseline:
+    description: "Write .ai-readable/baseline.json and badge.json from this run (do this on your main branch, then commit)."
+    required: false
+    default: "false"
+  fail-on:
+    description: "'regression' (default) exits 1 on a regression; 'never' only reports."
+    required: false
+    default: "regression"
+  comment:
+    description: "Post or update a single pull request comment with the results."
+    required: false
+    default: "true"
+  version:
+    description: "ai-readable npm version to run."
+    required: false
+    default: "0.1.0"
+  github-token:
+    description: "Token used for the pull request comment."
+    required: false
+    default: ${{ github.token }}
+
+outputs:
+  failed:
+    description: "'true' when a regression failed the run."
+    value: ${{ steps.run.outputs.failed }}
+  score:
+    description: "Lowest AI readability score across the checked pages."
+    value: ${{ steps.run.outputs.score }}
+  regressions:
+    description: "Number of failing regressions."
+    value: ${{ steps.run.outputs.regressions }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set up Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: "22"
+
+    - name: Install ai-readable
+      shell: bash
+      env:
+        INPUT_VERSION: ${{ inputs.version }}
+        INPUT_RENDER: ${{ inputs.render }}
+      run: |
+        prefix="$RUNNER_TEMP/ai-readable"
+        mkdir -p "$prefix"
+        pkgs=("ai-readable@$INPUT_VERSION")
+        [ "$INPUT_RENDER" = "true" ] && pkgs+=("playwright@1")
+        npm install --prefix "$prefix" --no-audit --no-fund --no-package-lock "${pkgs[@]}"
+        if [ "$INPUT_RENDER" = "true" ]; then
+          "$prefix/node_modules/.bin/playwright" install --with-deps chromium
+        fi
+
+    - name: Run ai-readable
+      id: run
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ inputs.github-token }}
+        INPUT_BASE_URL: ${{ inputs.base-url }}
+        INPUT_PATHS: ${{ inputs.paths }}
+        INPUT_RENDER: ${{ inputs.render }}
+        INPUT_HEADERS: ${{ inputs.headers }}
+        INPUT_UPDATE_BASELINE: ${{ inputs.update-baseline }}
+        INPUT_FAIL_ON: ${{ inputs.fail-on }}
+        INPUT_COMMENT: ${{ inputs.comment }}
+        INPUT_VERSION: ${{ inputs.version }}
+      run: |
+        args=(ci --fail-on "$INPUT_FAIL_ON")
+        [ -n "$INPUT_BASE_URL" ] && args+=(--base-url "$INPUT_BASE_URL")
+        if [ -n "$INPUT_PATHS" ]; then
+          read -r -a paths <<< "$INPUT_PATHS"
+          args+=(--paths "${paths[@]}")
+        fi
+        [ "$INPUT_RENDER" != "true" ] && args+=(--no-render)
+        [ "$INPUT_UPDATE_BASELINE" = "true" ] && args+=(--update-baseline)
+        [ "$INPUT_COMMENT" != "true" ] && args+=(--no-comment)
+        if [ -n "$INPUT_HEADERS" ]; then
+          while IFS= read -r line; do
+            [ -n "$line" ] && args+=(--header "$line")
+          done <<< "$INPUT_HEADERS"
+        fi
+        "$RUNNER_TEMP/ai-readable/node_modules/.bin/ai-readable" "${args[@]}"

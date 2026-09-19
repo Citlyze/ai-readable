@@ -1,0 +1,363 @@
+{
+  "schemaVersion": 1,
+  "tool": {
+    "name": "ai-readable",
+    "version": "0.1.0"
+  },
+  "url": "https://render.com/pricing",
+  "finalUrl": "https://render.com/pricing",
+  "fetchedAt": "2026-09-19T18:59:21.181Z",
+  "httpStatus": 200,
+  "fetchError": null,
+  "score": 95,
+  "checks": [
+    {
+      "id": "crawlerAccess",
+      "label": "AI crawler access",
+      "status": "pass",
+      "points": 25,
+      "max": 25,
+      "detail": "No search or assistant bots are blocked for this path."
+    },
+    {
+      "id": "indexable",
+      "label": "Reachable and indexable",
+      "status": "pass",
+      "points": 15,
+      "max": 15,
+      "detail": "HTTP 200, no noindex directive."
+    },
+    {
+      "id": "singleH1",
+      "label": "One descriptive H1",
+      "status": "pass",
+      "points": 10,
+      "max": 10,
+      "detail": "H1: \"Predictable pricing that scales with you.\"."
+    },
+    {
+      "id": "questionHeadings",
+      "label": "Question-shaped headings",
+      "status": "pass",
+      "points": 12,
+      "max": 12,
+      "detail": "8 of 28 subheadings are questions (for example \"How does billing work?\")."
+    },
+    {
+      "id": "answerBlocks",
+      "label": "Liftable answer blocks",
+      "status": "pass",
+      "points": 15,
+      "max": 15,
+      "detail": "6 headings followed by a 25 to 90 word paragraph."
+    },
+    {
+      "id": "structuredData",
+      "label": "Entity structured data",
+      "status": "pass",
+      "points": 10,
+      "max": 10,
+      "detail": "JSON-LD: organization, person, softwareapplication."
+    },
+    {
+      "id": "extractableFormats",
+      "label": "Tables and lists",
+      "status": "pass",
+      "points": 8,
+      "max": 8,
+      "detail": "5 tables, 143 list items."
+    },
+    {
+      "id": "titleAndDescription",
+      "label": "Title and meta description",
+      "status": "warn",
+      "points": 0,
+      "max": 5,
+      "detail": "Title 16 chars, description 16 chars. Aim for 15+ and 50+."
+    },
+    {
+      "id": "llmsTxt",
+      "label": "llms.txt",
+      "status": "info",
+      "points": 0,
+      "max": 0,
+      "detail": "llms.txt found. Not scored: no major engine documents reading it."
+    }
+  ],
+  "bots": [
+    {
+      "id": "oai-searchbot",
+      "name": "OAI-SearchBot",
+      "organization": "OpenAI",
+      "category": "search-index",
+      "allowed": true,
+      "token": "OAI-SearchBot",
+      "rule": "Allow: /",
+      "line": 28,
+      "docs": "https://platform.openai.com/docs/bots"
+    },
+    {
+      "id": "chatgpt-user",
+      "name": "ChatGPT-User",
+      "organization": "OpenAI",
+      "category": "assistant-fetch",
+      "allowed": true,
+      "token": "ChatGPT-User",
+      "rule": "Allow: /",
+      "line": 28,
+      "docs": "https://platform.openai.com/docs/bots"
+    },
+    {
+      "id": "gptbot",
+      "name": "GPTBot",
+      "organization": "OpenAI",
+      "category": "training",
+      "allowed": true,
+      "token": "GPTBot",
+      "rule": "Allow: /",
+      "line": 28,
+      "docs": "https://platform.openai.com/docs/bots"
+    },
+    {
+      "id": "claude-searchbot",
+      "name": "Claude-SearchBot",
+      "organization": "Anthropic",
+      "category": "search-index",
+      "allowed": true,
+      "token": "Claude-SearchBot",
+      "rule": "Allow: /",
+      "line": 28,
+      "docs": "https://support.anthropic.com/en/articles/8896518-does-anthropic-crawl-data-from-the-web-and-how-can-site-owners-block-the-crawler"
+    },
+    {
+      "id": "claude-user",
+      "name": "Claude-User",
+      "organization": "Anthropic",
+      "category": "assistant-fetch",
+      "allowed": true,
+      "token": "Claude-User",
+      "rule": "Allow: /",
+      "line": 28,
+      "docs": "https://support.anthropic.com/en/articles/8896518-does-anthropic-crawl-data-from-the-web-and-how-can-site-owners-block-the-crawler"
+    },
+    {
+      "id": "claudebot",
+      "name": "ClaudeBot",
+      "organization": "Anthropic",
+      "category": "training",
+      "allowed": true,
+      "token": "ClaudeBot",
+      "rule": "Allow: /",
+      "line": 28,
+      "docs": "https://support.anthropic.com/en/articles/8896518-does-anthropic-crawl-data-from-the-web-and-how-can-site-owners-block-the-crawler"
+    },
+    {
+      "id": "perplexitybot",
+      "name": "PerplexityBot",
+      "organization": "Perplexity",
+      "category": "search-index",
+      "allowed": true,
+      "token": "PerplexityBot",
+      "rule": "Allow: /",
+      "line": 28,
+      "docs": "https://docs.perplexity.ai/guides/bots"
+    },
+    {
+      "id": "perplexity-user",
+      "name": "Perplexity-User",
+      "organization": "Perplexity",
+      "category": "assistant-fetch",
+      "allowed": true,
+      "token": "Perplexity-User",
+      "rule": "Allow: /",
+      "line": 4,
+      "docs": "https://docs.perplexity.ai/guides/bots"
+    },
+    {
+      "id": "googlebot",
+      "name": "Googlebot",
+      "organization": "Google",
+      "category": "search-index",
+      "allowed": true,
+      "token": "Googlebot",
+      "rule": "Allow: /",
+      "line": 4,
+      "docs": "https://developers.google.com/search/docs/crawling-indexing/overview-google-crawlers"
+    },
+    {
+      "id": "google-extended",
+      "name": "Google-Extended",
+      "organization": "Google",
+      "category": "training",
+      "allowed": true,
+      "token": "Google-Extended",
+      "rule": "Allow: /",
+      "line": 28,
+      "docs": "https://developers.google.com/search/docs/crawling-indexing/overview-google-crawlers"
+    },
+    {
+      "id": "bingbot",
+      "name": "Bingbot",
+      "organization": "Microsoft",
+      "category": "search-index",
+      "allowed": true,
+      "token": "Bingbot",
+      "rule": "Allow: /",
+      "line": 4,
+      "docs": "https://www.bing.com/webmasters/help/which-crawlers-does-bing-use-8c184ec0"
+    },
+    {
+      "id": "applebot",
+      "name": "Applebot",
+      "organization": "Apple",
+      "category": "search-index",
+      "allowed": true,
+      "token": "Applebot",
+      "rule": "Allow: /",
+      "line": 4,
+      "docs": "https://support.apple.com/en-us/119829"
+    },
+    {
+      "id": "applebot-extended",
+      "name": "Applebot-Extended",
+      "organization": "Apple",
+      "category": "training",
+      "allowed": true,
+      "token": "Applebot-Extended",
+      "rule": "Allow: /",
+      "line": 28,
+      "docs": "https://support.apple.com/en-us/119829"
+    },
+    {
+      "id": "meta-externalfetcher",
+      "name": "Meta-ExternalFetcher",
+      "organization": "Meta",
+      "category": "assistant-fetch",
+      "allowed": true,
+      "token": "Meta-ExternalFetcher",
+      "rule": "Allow: /",
+      "line": 4,
+      "docs": "https://developers.facebook.com/docs/sharing/webmasters/web-crawlers"
+    },
+    {
+      "id": "meta-externalagent",
+      "name": "Meta-ExternalAgent",
+      "organization": "Meta",
+      "category": "training",
+      "allowed": true,
+      "token": "Meta-ExternalAgent",
+      "rule": "Allow: /",
+      "line": 28,
+      "docs": "https://developers.facebook.com/docs/sharing/webmasters/web-crawlers"
+    },
+    {
+      "id": "amazonbot",
+      "name": "Amazonbot",
+      "organization": "Amazon",
+      "category": "search-index",
+      "allowed": true,
+      "token": "Amazonbot",
+      "rule": "Allow: /",
+      "line": 28,
+      "docs": "https://developer.amazon.com/amazonbot"
+    },
+    {
+      "id": "duckassistbot",
+      "name": "DuckAssistBot",
+      "organization": "DuckDuckGo",
+      "category": "assistant-fetch",
+      "allowed": true,
+      "token": "DuckAssistBot",
+      "rule": "Allow: /",
+      "line": 4,
+      "docs": "https://duckduckgo.com/duckduckgo-help-pages/results/duckassistbot"
+    },
+    {
+      "id": "mistralai-user",
+      "name": "MistralAI-User",
+      "organization": "Mistral AI",
+      "category": "assistant-fetch",
+      "allowed": true,
+      "token": "MistralAI-User",
+      "rule": "Allow: /",
+      "line": 4,
+      "docs": "https://docs.mistral.ai/robots"
+    },
+    {
+      "id": "ccbot",
+      "name": "CCBot",
+      "organization": "Common Crawl",
+      "category": "training",
+      "allowed": true,
+      "token": "CCBot",
+      "rule": "Allow: /",
+      "line": 28,
+      "docs": "https://commoncrawl.org/ccbot"
+    }
+  ],
+  "robotsTxt": {
+    "found": true,
+    "sitemaps": [
+      "https://render.com/sitemap-index.xml"
+    ]
+  },
+  "llmsTxt": {
+    "found": true
+  },
+  "gap": null,
+  "renderError": null,
+  "facts": {
+    "title": "Pricing | Render",
+    "metaDescription": "Render's Pricing",
+    "robotsMeta": "index, follow",
+    "h1s": [
+      "Predictable pricing that scales with you."
+    ],
+    "subheadings": [
+      "Compute",
+      "Render Services & Storage",
+      "Networking",
+      "Protection",
+      "Build & Deploy",
+      "Monitoring",
+      "Platform Access & Security",
+      "Compliance",
+      "Support",
+      "Render Services & Storage",
+      "Networking",
+      "Protection",
+      "Build & Deploy",
+      "Monitoring",
+      "Platform Access & Security",
+      "Compliance",
+      "Support",
+      "Frequently Asked Questions",
+      "How does billing work?",
+      "How am I billed for compute?",
+      "My Pro or Scale workspace did not have any activity or services this month. Will I still be charged for the workspace subscription?",
+      "I run a large agency with developers on multiple teams. What does this mean for us?",
+      "What are build pipeline minutes, and how can I track my usage?",
+      "How do free compute plans work?",
+      "Which payment methods do you accept?",
+      "Why was I charged $1 after adding a credit card?",
+      "I have an infrequently asked question.",
+      "Start building with Render"
+    ],
+    "answerBlocks": 6,
+    "ldTypes": [
+      "organization",
+      "person",
+      "quantitativevalue",
+      "softwareapplication",
+      "offer",
+      "faqpage",
+      "question",
+      "answer"
+    ],
+    "tables": 5,
+    "listItems": 143,
+    "wordCount": 2564,
+    "canonical": "https://render.com/pricing",
+    "lang": "en"
+  }
+}
