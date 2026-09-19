@@ -78,6 +78,8 @@ describe("ai-readable check", () => {
     const svg = await readFile(card, "utf8");
     expect(svg).toContain("<svg");
     expect(svg).toContain("AI readability");
+    // Every search and assistant bot gets a chip.
+    for (const name of ["OAI-SearchBot", "Claude-SearchBot", "PerplexityBot", "MistralAI-User", "DuckAssistBot"]) expect(svg).toContain(name);
   }, 20000);
 
   it("measures the rendered gap with --render", async () => {

@@ -45,7 +45,8 @@ export function renderCardSvg(report: PageReport): string {
     headTone = tone(report.score >= 75, report.score >= 50);
   }
 
-  const bots = report.bots.filter((b) => RETRIEVAL_CATEGORIES.includes(b.category)).slice(0, 12);
+  // Four rows of four: room for every search and assistant bot in the registry.
+  const bots = report.bots.filter((b) => RETRIEVAL_CATEGORIES.includes(b.category)).slice(0, 16);
   const chipW = 262;
   const chipH = 44;
   const perRow = 4;
