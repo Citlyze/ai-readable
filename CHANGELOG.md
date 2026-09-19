@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.2
+
+- Marketplace listing renamed to "ai-readable gate". No functional change.
+
 ## 0.1.1
 
 - Action metadata: description shortened to the GitHub Marketplace limit. No functional change.

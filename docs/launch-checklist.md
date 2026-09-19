@@ -23,7 +23,7 @@ Applied by `scripts/github-setup.sh` on 2026-09-19: repository created, descript
 
 1. Push `main`, wait for CI, Pages and Self-check to go green.
 2. Tag `v0.1.0` and push the tag; `release.yml` publishes to npm with provenance.
-3. Create the GitHub Release from the tag (as the org account), notes from `CHANGELOG.md`, and tick **Publish this Action to the GitHub Marketplace**. The Action name `ai-readable` must be free on the Marketplace; if not, change `name` in `action.yml` before releasing.
+3. Create the GitHub Release from the tag (as the org account), notes from `CHANGELOG.md`, and tick **Publish this Action to the GitHub Marketplace**. The Action's Marketplace listing is named `ai-readable gate` (slug `ai-readable-gate`); the bare name was left orphaned by a deleted repository and GitHub errors on it.
 4. Create and push the moving tag `v1` pointing at the same commit, so `Citlyze/ai-readable@v1` resolves. Move it on every compatible release.
 5. Bump the `version` default in `action.yml` with every npm release.
 

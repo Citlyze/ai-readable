@@ -5,7 +5,7 @@
 [![npm](https://img.shields.io/npm/v/ai-readable?color=16a34a)](https://www.npmjs.com/package/ai-readable)
 [![CI](https://github.com/Citlyze/ai-readable/actions/workflows/ci.yml/badge.svg)](https://github.com/Citlyze/ai-readable/actions/workflows/ci.yml)
 [![Self-check](https://github.com/Citlyze/ai-readable/actions/workflows/self-check.yml/badge.svg)](https://github.com/Citlyze/ai-readable/actions/workflows/self-check.yml)
-[![GitHub Marketplace](https://img.shields.io/badge/marketplace-ai--readable-2ea44f?logo=github)](https://github.com/marketplace/actions/ai-readable)
+[![GitHub Marketplace](https://img.shields.io/badge/marketplace-ai--readable%20gate-2ea44f?logo=github)](https://github.com/marketplace/actions/ai-readable-gate)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 ![Terminal demo: a client-rendered pricing page scores 40/100 with zero words in the initial HTML, then 100/100 after the fix](docs/assets/demo.svg)
