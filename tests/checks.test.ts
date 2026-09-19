@@ -52,7 +52,9 @@ describe("runChecks", () => {
   it("fails indexable on meta noindex, X-Robots-Tag and error statuses", () => {
     expect(byId(runChecks(input(site("noindex/index.html"))), "indexable").status).toBe("fail");
     expect(byId(runChecks(input(site("index.html"), { xRobotsTag: "noindex, nofollow" })), "indexable").status).toBe("fail");
-    expect(byId(runChecks(input(site("index.html"), { httpStatus: 404 })), "indexable").detail).toContain("HTTP 404");
+    const notFound = runChecks(input(site("index.html"), { httpStatus: 404 }));
+    expect(byId(notFound, "indexable").detail).toContain("HTTP 404");
+    expect(notFound.score).toBe(0);
     expect(byId(runChecks(input(site("index.html"), { httpStatus: null })), "indexable").status).toBe("pass");
   });
 

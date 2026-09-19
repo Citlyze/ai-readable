@@ -269,7 +269,9 @@ export function runChecks(input: ChecksInput): ChecksResult {
 
   const max = checks.reduce((sum, c) => sum + c.max, 0);
   const earned = checks.reduce((sum, c) => sum + c.points, 0);
-  return { score: Math.round((earned / max) * 100), checks };
+  // An error page is not the page. Whatever structure the 404 template has,
+  // engines never index it, so the score is zero, not credit for the template.
+  return { score: errorStatus ? 0 : Math.round((earned / max) * 100), checks };
 }
 
 export const STATUS_RANK: Record<CheckStatus, number> = { pass: 0, info: 0, warn: 1, fail: 2 };

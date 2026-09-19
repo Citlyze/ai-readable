@@ -32,7 +32,7 @@ inputs:
     required: false
     default: "true"
   version:
-    description: "ai-readable npm version to run."
+    description: "ai-readable npm version to run. Bumped with every release so @v1 tracks the latest 0.x/1.x."
     required: false
     default: "0.1.0"
   github-token:
