@@ -15,6 +15,13 @@ describe("action.yml", () => {
     expect(offenders).toEqual([]);
   });
 
+  it("keeps the description under the Marketplace limit of 125 characters", () => {
+    const line = lines.find((l) => /^description:/.test(l)) ?? "";
+    const description = line.replace(/^description:\s*"?/, "").replace(/"?\s*$/, "");
+    expect(description.length).toBeGreaterThan(0);
+    expect(description.length).toBeLessThan(125);
+  });
+
   it("only references contexts that exist inside a composite action", () => {
     const contexts = new Set<string>();
     for (const line of lines) {

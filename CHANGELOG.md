@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.1
+
+- Action metadata: description shortened to the GitHub Marketplace limit. No functional change.
+
 ## 0.1.0
 
 First release.

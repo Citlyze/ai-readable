@@ -1,5 +1,5 @@
 name: "ai-readable"
-description: "Fail CI when a deploy makes a page unreadable to AI search: robots.txt access per AI crawler, noindex leaks, and content that only exists after JavaScript."
+description: "See what each AI crawler gets from your pages, and fail CI when a deploy makes a page unreadable to AI search."
 author: "Citlyze"
 branding:
   icon: "eye"
@@ -34,7 +34,7 @@ inputs:
   version:
     description: "ai-readable npm version to run. Bumped with every release so @v1 tracks the latest 0.x/1.x."
     required: false
-    default: "0.1.0"
+    default: "0.1.1"
   source:
     description: "'npm' (default) installs the published package; 'local' builds the checked-out action itself. 'local' is for this repository's own self-check."
     required: false
