@@ -110,6 +110,19 @@ Claude Code plugin:
 /plugin install ai-readable@ai-readable
 ```
 
+Codex plugin:
+
+```bash
+codex plugin marketplace add Citlyze/ai-readable
+codex plugin add ai-readable@ai-readable
+```
+
+OpenCode, Cursor, Gemini CLI or any other tool that reads the Agent Skills standard, targeting one agent explicitly:
+
+```bash
+npx skills add Citlyze/ai-readable -a opencode
+```
+
 The skill runs the check, picks the recipe for your framework, applies the smallest fix, and reruns until green. It stops and asks before changing prices, claims or brand copy.
 
 Recipes: [Next.js](docs/recipes/nextjs.md) · [Astro](docs/recipes/astro.md) · [Vite / Lovable / v0 / Bolt exports](docs/recipes/spa-export.md) · [robots.txt](docs/recipes/robots.md)
