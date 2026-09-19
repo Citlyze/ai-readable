@@ -35,6 +35,10 @@ inputs:
     description: "ai-readable npm version to run. Bumped with every release so @v1 tracks the latest 0.x/1.x."
     required: false
     default: "0.1.0"
+  source:
+    description: "'npm' (default) installs the published package; 'local' builds the checked-out action itself. 'local' is for this repository's own self-check."
+    required: false
+    default: "npm"
   github-token:
     description: "Token used for the pull request comment."
     required: false
@@ -64,14 +68,31 @@ runs:
       env:
         INPUT_VERSION: ${{ inputs.version }}
         INPUT_RENDER: ${{ inputs.render }}
+        INPUT_SOURCE: ${{ inputs.source }}
+        ACTION_PATH: ${{ github.action_path }}
       run: |
         prefix="$RUNNER_TEMP/ai-readable"
-        mkdir -p "$prefix"
-        pkgs=("ai-readable@$INPUT_VERSION")
-        [ "$INPUT_RENDER" = "true" ] && pkgs+=("playwright@1")
-        npm install --prefix "$prefix" --no-audit --no-fund --no-package-lock "${pkgs[@]}"
-        if [ "$INPUT_RENDER" = "true" ]; then
-          "$prefix/node_modules/.bin/playwright" install --with-deps chromium
+        mkdir -p "$prefix/node_modules/.bin"
+        if [ "$INPUT_SOURCE" = "local" ]; then
+          # Build the checked-out action itself (this repository's self-check).
+          cd "$ACTION_PATH"
+          npm install -g pnpm@10 >/dev/null
+          pnpm install --frozen-lockfile
+          pnpm build
+          printf '#!/usr/bin/env bash\nexec node "%s/dist/cli.js" "$@"\n' "$ACTION_PATH" > "$prefix/node_modules/.bin/ai-readable"
+          chmod +x "$prefix/node_modules/.bin/ai-readable"
+          if [ "$INPUT_RENDER" = "true" ]; then
+            pnpm exec playwright install --with-deps chromium
+            # The CLI resolves Playwright from the project it runs in; point it at the checkout.
+            ln -sfn "$ACTION_PATH/node_modules/playwright" "$prefix/node_modules/playwright" || true
+          fi
+        else
+          pkgs=("ai-readable@$INPUT_VERSION")
+          [ "$INPUT_RENDER" = "true" ] && pkgs+=("playwright@1")
+          npm install --prefix "$prefix" --no-audit --no-fund --no-package-lock "${pkgs[@]}"
+          if [ "$INPUT_RENDER" = "true" ]; then
+            "$prefix/node_modules/.bin/playwright" install --with-deps chromium
+          fi
         fi
 
     - name: Run ai-readable

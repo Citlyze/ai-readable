@@ -31,6 +31,7 @@ jobs:
           base-url: ${{ env.FIXTURE_URL }}
           paths: "/ /fixture/ /fixture/fixed/pricing/"
           comment: "false"
+          source: local
 
   broken-pages:
     name: Broken pages go red
@@ -44,6 +45,7 @@ jobs:
           base-url: ${{ env.FIXTURE_URL }}
           paths: "/fixture/pricing/ /fixture/blocked/ /fixture/noindex/"
           comment: "false"
+          source: local
       - name: Assert the gate failed
         if: steps.gate.outcome != 'failure'
         run: |
