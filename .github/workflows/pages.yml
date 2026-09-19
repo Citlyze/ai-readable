@@ -3,7 +3,7 @@ name: Publish fixture site
 on:
   push:
     branches: [main]
-    paths: ["fixture-site/**"]
+    paths: ["site/**"]
   workflow_dispatch:
 
 permissions:
@@ -26,6 +26,6 @@ jobs:
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: fixture-site
+          path: site
       - id: deployment
         uses: actions/deploy-pages@v4

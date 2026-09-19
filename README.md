@@ -5,7 +5,10 @@
 [![npm](https://img.shields.io/npm/v/ai-readable?color=16a34a)](https://www.npmjs.com/package/ai-readable)
 [![CI](https://github.com/Citlyze/ai-readable/actions/workflows/ci.yml/badge.svg)](https://github.com/Citlyze/ai-readable/actions/workflows/ci.yml)
 [![Self-check](https://github.com/Citlyze/ai-readable/actions/workflows/self-check.yml/badge.svg)](https://github.com/Citlyze/ai-readable/actions/workflows/self-check.yml)
+[![GitHub Marketplace](https://img.shields.io/badge/marketplace-ai--readable-2ea44f?logo=github)](https://github.com/marketplace/actions/ai-readable)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
+![Terminal demo: a client-rendered pricing page scores 40/100 with zero words in the initial HTML, then 100/100 after the fix](docs/assets/demo.svg)
 
 ```bash
 npx ai-readable example.com/pricing --render
@@ -35,8 +38,6 @@ https://example.com/pricing/
     PerplexityBot          Perplexity   allowed
     ...
 ```
-
-![Share card: 1 word in the HTML AI crawlers get, 105 after JavaScript](docs/assets/pricing-card.png)
 
 Most AI retrieval crawlers do not run JavaScript. A pricing page that is one word of "Loading…" to them is invisible in AI answers no matter how good it looks in a browser. `ai-readable` shows you that gap, the robots.txt rule that blocks a search bot, the `noindex` that leaked from staging, and it keeps them from coming back.
 
@@ -131,10 +132,29 @@ Programmatic use: `import { auditUrl } from "ai-readable"` returns the same repo
 
 ## Examples
 
-[examples/](examples/README.md) has reports and share cards for twenty public pricing pages. The fixture site at [citlyze.github.io/ai-readable](https://citlyze.github.io/ai-readable/) has one deliberately broken page per failure class; the [self-check workflow](.github/workflows/self-check.yml) runs the Action against it on every push.
+[examples/](examples/README.md) has reports and share cards for twenty public pricing pages. The demo site at [citlyze.github.io/ai-readable/fixture](https://citlyze.github.io/ai-readable/fixture/) has one deliberately broken page per failure class; the [self-check workflow](.github/workflows/self-check.yml) runs the Action against it on every push.
+
+## How it compares
+
+| | ai-readable | Lighthouse / Core Web Vitals | SEO agent skills | AI visibility trackers |
+|---|---|---|---|---|
+| Per-bot robots.txt verdict with the matching line | yes | no | sometimes | no |
+| Initial HTML versus rendered content | yes | no | no | no |
+| Runs in CI and fails on regression | yes | yes | no | no |
+| Pull request comment and badge | yes | yes | no | no |
+| Needs an API key or an AI call | no | no | usually | yes |
+| Tells you whether AI engines cite you | no | no | no | yes |
+
+Use it next to Lighthouse, not instead of it, and pair it with a visibility tracker once the pages are readable.
+
+## Spread the word
+
+If this saved you a "why is our pricing page invisible to ChatGPT" afternoon, star the repository so other people find it, add the badge to your README, and post your share card. Every card is a real page, not a mockup.
+
+[![Star History Chart](https://api.star-history.com/svg?repos=Citlyze/ai-readable&type=Date)](https://star-history.com/#Citlyze/ai-readable&Date)
 
 ## Contributing
 
-Add a bot with its vendor documentation link, add a framework recipe, or report a wrong result with the URL. See [CONTRIBUTING.md](CONTRIBUTING.md).
+Add a bot with its vendor documentation link, add a framework recipe, or report a wrong result with the URL. See [CONTRIBUTING.md](CONTRIBUTING.md). Questions go in [Discussions](https://github.com/Citlyze/ai-readable/discussions); security reports follow [SECURITY.md](SECURITY.md).
 
 MIT © [Citlyze](https://www.citlyze.com)

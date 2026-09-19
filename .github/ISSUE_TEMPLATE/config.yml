@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Question about a result
+    url: https://github.com/Citlyze/ai-readable/discussions
+    about: Not sure whether a check is right? Ask in Discussions with the URL and the output.
+  - name: Security report
+    url: https://github.com/Citlyze/ai-readable/blob/main/SECURITY.md
+    about: Please email security reports instead of opening an issue.

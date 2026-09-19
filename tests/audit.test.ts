@@ -4,7 +4,7 @@ import { auditUrl } from "../src/engine/audit";
 import { fetchText } from "../src/engine/fetch";
 import { serveDir, type FixtureServer } from "./helpers/server";
 
-const ROOT = join(__dirname, "..", "fixture-site");
+const ROOT = join(__dirname, "..", "site");
 const SECRET = { "x-preview-bypass": "s3cret" };
 
 let site: FixtureServer;
@@ -14,7 +14,7 @@ beforeAll(async () => {
   // "other" plays the third-party host a page might redirect to.
   other = await serveDir(ROOT);
   site = await serveDir(ROOT, {
-    redirects: { "/go-elsewhere": `${other.url}/blocked/`, "/go-home": "/" },
+    redirects: { "/go-elsewhere": `${other.url}/fixture/blocked/`, "/go-home": "/fixture/" },
     bodies: {
       "/spa-fallback/robots.txt": { body: "<!doctype html><html><body>app shell</body></html>" },
     },
@@ -30,17 +30,17 @@ describe("fetchText", () => {
   it("follows a same-origin redirect and keeps custom headers", async () => {
     const result = await fetchText(`${site.url}/go-home`, { headers: SECRET });
     expect(result.status).toBe(200);
-    expect(result.finalUrl).toBe(`${site.url}/`);
-    expect(result.redirects).toEqual([`${site.url}/`]);
-    const landing = site.requests.find((r) => r.url === "/");
+    expect(result.finalUrl).toBe(`${site.url}/fixture/`);
+    expect(result.redirects).toEqual([`${site.url}/fixture/`]);
+    const landing = site.requests.find((r) => r.url === "/fixture/");
     expect(landing?.headers["x-preview-bypass"]).toBe("s3cret");
   });
 
   it("drops custom headers on a cross-origin redirect", async () => {
     const result = await fetchText(`${site.url}/go-elsewhere`, { headers: SECRET });
     expect(result.status).toBe(200);
-    expect(result.finalUrl).toBe(`${other.url}/blocked/`);
-    const hop = other.requests.find((r) => r.url === "/blocked/");
+    expect(result.finalUrl).toBe(`${other.url}/fixture/blocked/`);
+    const hop = other.requests.find((r) => r.url === "/fixture/blocked/");
     expect(hop).toBeDefined();
     expect(hop?.headers["x-preview-bypass"]).toBeUndefined();
     expect(hop?.headers["user-agent"]).toContain("ai-readable");
@@ -58,7 +58,7 @@ describe("fetchText", () => {
   });
 
   it("truncates at the byte cap", async () => {
-    const result = await fetchText(`${site.url}/`, { maxBytes: 100 });
+    const result = await fetchText(`${site.url}/fixture/`, { maxBytes: 100 });
     expect(result.truncated).toBe(true);
     expect(result.byteLength).toBe(100);
   });
@@ -68,7 +68,7 @@ describe("auditUrl", () => {
   it("re-reads robots.txt from the final origin after a cross-origin redirect, without the secret", async () => {
     other.requests.length = 0;
     const report = await auditUrl(`${site.url}/go-elsewhere`, { headers: SECRET });
-    expect(report.finalUrl).toBe(`${other.url}/blocked/`);
+    expect(report.finalUrl).toBe(`${other.url}/fixture/blocked/`);
     const robots = other.requests.filter((r) => r.url === "/robots.txt");
     expect(robots.length).toBeGreaterThan(0);
     expect(robots.every((r) => r.headers["x-preview-bypass"] === undefined)).toBe(true);
@@ -82,7 +82,7 @@ describe("auditUrl", () => {
       bodies: { "/robots.txt": { body: "<!doctype html><html><body>app shell</body></html>" } },
     });
     try {
-      const report = await auditUrl(`${spa.url}/`);
+      const report = await auditUrl(`${spa.url}/fixture/`);
       expect(report.robotsTxt.found).toBe(false);
       expect(report.checks.find((c) => c.id === "crawlerAccess")?.detail).toContain("No robots.txt");
       expect(report.bots.every((b) => b.allowed)).toBe(true);
@@ -96,7 +96,7 @@ describe("auditUrl", () => {
       bodies: { "/llms.txt": { body: "<html><body>404</body></html>" } },
     });
     try {
-      const report = await auditUrl(`${spa.url}/`);
+      const report = await auditUrl(`${spa.url}/fixture/`);
       expect(report.llmsTxt.found).toBe(false);
     } finally {
       await spa.close();
@@ -133,4 +133,11 @@ describe("renderPage header scoping", () => {
       await third.close();
     }
   }, 60000);
+});
+
+describe("fetchText error messages", () => {
+  it("explains a blocked port instead of a generic failure", async () => {
+    const result = await fetchText("http://127.0.0.1:4190/");
+    expect(result.error).toContain("blocked-port list");
+  });
 });

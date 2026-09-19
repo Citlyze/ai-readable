@@ -1,0 +1,8 @@
+# Acme Widget Pro (fixture site for ai-readable)
+
+> A demo site with one deliberately broken page per failure class.
+
+- [Buying guide](https://citlyze.github.io/ai-readable/fixture/): passes every check
+- [Pricing](https://citlyze.github.io/ai-readable/fixture/pricing/): client-rendered, invisible to crawlers that skip JavaScript
+- [Blocked docs](https://citlyze.github.io/ai-readable/fixture/blocked/): OAI-SearchBot disallowed in robots.txt
+- [Noindex](https://citlyze.github.io/ai-readable/fixture/noindex/): noindex leaked from staging

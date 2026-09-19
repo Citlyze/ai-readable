@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>ai-readable: see what each AI crawler gets from your pages</title>
+  <meta name="description" content="ai-readable is a free CLI and GitHub Action that shows what each AI crawler actually gets from your pages and fails CI when a deploy makes a page unreadable to AI search.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="canonical" href="https://citlyze.github.io/ai-readable/">
+  <meta property="og:title" content="ai-readable: see what each AI crawler gets from your pages">
+  <meta property="og:description" content="Free CLI and GitHub Action. Per-bot robots.txt verdicts, initial HTML versus rendered content, nine AI readability checks, and a CI gate that stops regressions.">
+  <meta property="og:image" content="https://citlyze.github.io/ai-readable/social-preview.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"ai-readable","applicationCategory":"DeveloperApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"license":"https://opensource.org/licenses/MIT","codeRepository":"https://github.com/Citlyze/ai-readable","publisher":{"@type":"Organization","name":"Citlyze","url":"https://www.citlyze.com"}}</script>
+  <style>
+    :root { color-scheme: light dark; --bg: #0b1220; --fg: #e5e7eb; --muted: #94a3b8; --accent: #22c55e; --card: #111a2e; --border: #1f2a44; }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: var(--fg); line-height: 1.55; }
+    main { max-width: 860px; margin: 0 auto; padding: 56px 20px 80px; }
+    h1 { font-size: 2.2rem; letter-spacing: -0.02em; margin: 0 0 12px; }
+    h2 { font-size: 1.35rem; margin: 40px 0 8px; }
+    p { margin: 0 0 14px; }
+    .lead { color: var(--muted); font-size: 1.1rem; }
+    pre { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; overflow-x: auto; font-size: 0.95rem; }
+    code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    table { border-collapse: collapse; width: 100%; margin: 12px 0 20px; font-size: 0.95rem; }
+    th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    th { color: var(--muted); font-weight: 600; }
+    a { color: var(--accent); }
+    .cta { display: inline-block; margin: 6px 12px 6px 0; padding: 10px 16px; border-radius: 8px; background: var(--accent); color: #052e16; font-weight: 600; text-decoration: none; }
+    .cta.secondary { background: transparent; color: var(--fg); border: 1px solid var(--border); }
+    footer { color: var(--muted); font-size: 0.9rem; margin-top: 48px; border-top: 1px solid var(--border); padding-top: 16px; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>See what each AI crawler gets from your pages</h1>
+  <p class="lead">ai-readable is a free command line tool and GitHub Action. It shows the robots.txt verdict for every documented AI crawler, how much of a page exists before JavaScript runs, and nine AI readability checks. In CI it fails a pull request when a deploy makes a page unreadable to AI search.</p>
+  <pre><code>npx ai-readable example.com/pricing --render</code></pre>
+  <p><a class="cta" href="https://github.com/Citlyze/ai-readable">View on GitHub</a> <a class="cta secondary" href="https://www.npmjs.com/package/ai-readable">npm package</a> <a class="cta secondary" href="fixture/">Try it on the demo site</a></p>
+
+  <h2>What does ai-readable check?</h2>
+  <p>It checks nine things a crawler can read from the page as served: whether search and assistant bots are allowed in robots.txt, whether the page is indexable, one descriptive H1, question-shaped headings, a direct answer under each heading, entity structured data, tables and lists, and a title with a meta description. With the render flag it also loads the page in headless Chromium and reports how much of the content only exists after JavaScript.</p>
+  <table>
+    <tr><th>Check</th><th>Points</th><th>Passes when</th></tr>
+    <tr><td>AI crawler access</td><td>25</td><td>No search-index or assistant-fetch bot is blocked for the path</td></tr>
+    <tr><td>Reachable and indexable</td><td>15</td><td>Status below 400, no noindex in meta robots or X-Robots-Tag</td></tr>
+    <tr><td>One descriptive H1</td><td>10</td><td>Exactly one H1 of three or more words</td></tr>
+    <tr><td>Question-shaped headings</td><td>12</td><td>At least two H2 or H3 headings phrased as questions</td></tr>
+    <tr><td>Liftable answer blocks</td><td>15</td><td>At least two headings followed by a 25 to 90 word paragraph</td></tr>
+    <tr><td>Entity structured data</td><td>10</td><td>JSON-LD naming an Organization, Product, Article or similar</td></tr>
+    <tr><td>Tables and lists</td><td>8</td><td>At least one table or three list items</td></tr>
+    <tr><td>Title and meta description</td><td>5</td><td>Title of 15+ characters, description of 50+</td></tr>
+  </table>
+
+  <h2>Why does the initial HTML matter?</h2>
+  <p>Most AI retrieval crawlers do not execute JavaScript. A pricing page that renders entirely on the client is a title and an empty div to them, so it cannot be cited no matter how good it looks in a browser. ai-readable compares the HTML a crawler downloads with the page after JavaScript ran and reports the gap, with the headings that only appear after rendering.</p>
+
+  <h2>How does the CI gate work?</h2>
+  <p>You commit a baseline of your key pages. On every pull request the Action checks the preview deployment against that baseline and fails when a page regresses: a search bot newly blocked, a noindex that leaked from staging, a score drop, or content that moved behind JavaScript. It posts one comment on the pull request with the evidence and a link to the fix recipe, and refreshes a README badge on your main branch.</p>
+  <pre><code>npx ai-readable init --base-url https://example.com
+npx ai-readable ci --update-baseline</code></pre>
+
+  <h2>Which AI crawlers does it know?</h2>
+  <p>Nineteen documented bots from OpenAI, Anthropic, Perplexity, Google, Microsoft, Apple, Meta, Amazon, DuckDuckGo, Mistral and Common Crawl, each with a link to the vendor's own documentation and grouped by what blocking it costs you.</p>
+  <ul>
+    <li>Search index bots build the index that live answers retrieve from. Blocking them removes your pages from those answers.</li>
+    <li>Assistant fetch bots open a page on demand when a user asks about it. Blocking them breaks link reading and citations.</li>
+    <li>Training bots collect content for model training. Blocking them does not change what live answers can cite.</li>
+  </ul>
+
+  <h2>What does it not do?</h2>
+  <p>It never spoofs bot user agents, because CDNs verify real crawlers by IP and a spoofed request would tell you about the CDN rather than the crawler. It also does not know whether AI engines mention or cite you. A green check means they can read the page. Tracking whether they use it is what <a href="https://www.citlyze.com">Citlyze</a> does.</p>
+
+  <footer>MIT licensed. Maintained by <a href="https://www.citlyze.com">Citlyze</a>. The pages under <a href="fixture/">/fixture/</a> are deliberately broken demos used by the project's own CI.</footer>
+</main>
+</body>
+</html>

@@ -1,0 +1,35 @@
+name: Add an AI crawler
+description: Propose a bot for the registry. It needs vendor documentation.
+title: "[bot] "
+labels: ["bot-registry"]
+body:
+  - type: input
+    id: name
+    attributes:
+      label: Bot name and robots.txt token
+      placeholder: ExampleBot
+    validations:
+      required: true
+  - type: input
+    id: docs
+    attributes:
+      label: Vendor documentation URL
+      description: The vendor's own page naming the token. Third-party lists do not count.
+    validations:
+      required: true
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      description: By consequence of blocking it, not by the vendor's wording.
+      options:
+        - search-index (builds an index that live answers retrieve from)
+        - assistant-fetch (fetches a page on demand when a user asks)
+        - training (collects content for model training)
+    validations:
+      required: true
+  - type: input
+    id: feeds
+    attributes:
+      label: What it feeds
+      placeholder: Example search results

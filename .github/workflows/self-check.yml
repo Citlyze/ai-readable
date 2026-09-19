@@ -1,8 +1,9 @@
 name: Self-check
 
-# Runs this repository's own Action against the fixture site published on
-# GitHub Pages. Proves a green run on the good pages and a red run on the
-# broken ones, so the README's before/after is always real.
+# Runs this repository's own Action against the site published on GitHub
+# Pages: the landing page and the good fixture pages must stay green, the
+# deliberately broken fixture pages must go red. The README's before/after
+# is therefore always real, and the landing page is dogfooded.
 
 on:
   push:
@@ -28,7 +29,7 @@ jobs:
       - uses: ./
         with:
           base-url: ${{ env.FIXTURE_URL }}
-          paths: "/ /fixed/pricing/"
+          paths: "/ /fixture/ /fixture/fixed/pricing/"
           comment: "false"
 
   broken-pages:
@@ -41,7 +42,7 @@ jobs:
         continue-on-error: true
         with:
           base-url: ${{ env.FIXTURE_URL }}
-          paths: "/pricing/ /blocked/ /noindex/"
+          paths: "/fixture/pricing/ /fixture/blocked/ /fixture/noindex/"
           comment: "false"
       - name: Assert the gate failed
         if: steps.gate.outcome != 'failure'

@@ -52,8 +52,13 @@ export function sameOrigin(a: string, b: string): boolean {
 }
 
 function describe(error: unknown): string {
-  const message = error instanceof Error ? error.message : String(error);
+  const cause = (error as { cause?: { message?: string; code?: string } }).cause;
+  const message = [error instanceof Error ? error.message : String(error), cause?.message, cause?.code]
+    .filter(Boolean)
+    .join(" ");
   if (error instanceof DOMException && error.name === "AbortError") return "Request timed out.";
+  if (/bad port/i.test(message))
+    return "This port is on the Fetch specification's blocked-port list, so Node refuses to connect. Serve the site on another port.";
   if (/timeout|timed?[ _-]?out|ETIMEDOUT/i.test(message)) return "Request timed out.";
   if (/ENOTFOUND|EAI_AGAIN|getaddrinfo/i.test(message)) return "Domain could not be resolved.";
   if (/certificate|CERT_|SSL|TLS|EPROTO/i.test(message))

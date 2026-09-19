@@ -32,13 +32,13 @@ let work: string;
 let fixtureCopy: string;
 
 beforeAll(async () => {
-  server = await serveDir(join(ROOT, "fixture-site"), {
-    headers: { "/blocked/": { "x-robots-tag": "index" } },
+  server = await serveDir(join(ROOT, "site"), {
+    headers: { "/fixture/blocked/": { "x-robots-tag": "index" } },
   });
   work = await mkdtemp(join(tmpdir(), "ai-readable-"));
   // A second copy of the site whose robots.txt we can break between runs.
   fixtureCopy = await mkdtemp(join(tmpdir(), "ai-readable-site-"));
-  await cp(join(ROOT, "fixture-site"), fixtureCopy, { recursive: true });
+  await cp(join(ROOT, "site"), fixtureCopy, { recursive: true });
   broken = await serveDir(fixtureCopy);
 }, 30000);
 
@@ -51,7 +51,7 @@ afterAll(async () => {
 
 describe("ai-readable check", () => {
   it("prints a scored report for the good page and exits 0", async () => {
-    const run = await cli([`${server.url}/`], work);
+    const run = await cli([`${server.url}/fixture/`], work);
     expect(run.code).toBe(0);
     expect(run.stdout).toContain("100/100");
     expect(run.stdout).toContain("OAI-SearchBot");
@@ -59,13 +59,13 @@ describe("ai-readable check", () => {
   }, 20000);
 
   it("emits JSON with the per-bot verdicts and quotes the blocking rule", async () => {
-    const run = await cli([`${server.url}/blocked/`, "--json"], work);
+    const run = await cli([`${server.url}/fixture/blocked/`, "--json"], work);
     expect(run.code).toBe(0);
     const report = JSON.parse(run.stdout);
     expect(report.schemaVersion).toBe(1);
     const oai = report.bots.find((b: { name: string }) => b.name === "OAI-SearchBot");
     expect(oai.allowed).toBe(false);
-    expect(oai.rule).toBe("Disallow: /blocked/");
+    expect(oai.rule).toBe("Disallow: /fixture/blocked/");
     expect(report.checks.find((c: { id: string }) => c.id === "crawlerAccess").status).toBe("fail");
     const gpt = report.bots.find((b: { name: string }) => b.name === "GPTBot");
     expect(gpt.allowed).toBe(false);
@@ -73,7 +73,7 @@ describe("ai-readable check", () => {
 
   it("writes an SVG share card", async () => {
     const card = join(work, "card.svg");
-    const run = await cli([`${server.url}/pricing/`, "--card", card], work);
+    const run = await cli([`${server.url}/fixture/pricing/`, "--card", card], work);
     expect(run.code).toBe(0);
     const svg = await readFile(card, "utf8");
     expect(svg).toContain("<svg");
@@ -83,7 +83,7 @@ describe("ai-readable check", () => {
   }, 20000);
 
   it("measures the rendered gap with --render", async () => {
-    const run = await cli([`${server.url}/pricing/`, "--render", "--json"], work);
+    const run = await cli([`${server.url}/fixture/pricing/`, "--render", "--json"], work);
     expect(run.code).toBe(0);
     const report = JSON.parse(run.stdout);
     expect(report.renderError).toBeNull();
@@ -103,15 +103,15 @@ describe("ai-readable ci", () => {
   it("creates a baseline and badge, then fails when robots.txt starts blocking a search bot", async () => {
     await writeFile(
       join(work, "ai-readable.config.json"),
-      JSON.stringify({ paths: ["/", "/blocked/"], render: false }),
+      JSON.stringify({ paths: ["/fixture/", "/fixture/blocked/"], render: false }),
     );
 
     const first = await cli(["ci", "--base-url", broken.url, "--update-baseline"], work);
     expect(first.code).toBe(0);
     expect(first.stderr).toContain("no regressions");
     const baseline = JSON.parse(await readFile(join(work, ".ai-readable", "baseline.json"), "utf8"));
-    expect(Object.keys(baseline.pages).sort()).toEqual(["/", "/blocked/"]);
-    expect(baseline.pages["/"].score).toBe(100);
+    expect(Object.keys(baseline.pages).sort()).toEqual(["/fixture/", "/fixture/blocked/"]);
+    expect(baseline.pages["/fixture/"].score).toBe(100);
     const badge = JSON.parse(await readFile(join(work, ".ai-readable", "badge.json"), "utf8"));
     expect(badge.label).toBe("ai-readable");
 
@@ -129,7 +129,7 @@ describe("ai-readable ci", () => {
 
   it("fails a noindex page even on the first run", async () => {
     const dir = await mkdtemp(join(tmpdir(), "ai-readable-noindex-"));
-    const run = await cli(["ci", "--paths", `${server.url}/noindex/`, "--no-render"], dir);
+    const run = await cli(["ci", "--paths", `${server.url}/fixture/noindex/`, "--no-render"], dir);
     expect(run.code).toBe(1);
     expect(run.stdout).toContain("noindex");
     await rm(dir, { recursive: true, force: true });

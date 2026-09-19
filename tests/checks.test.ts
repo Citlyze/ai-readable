@@ -5,7 +5,7 @@ import { isQuestion, runChecks, type ChecksInput } from "../src/engine/checks";
 import { extractPageFacts } from "../src/engine/extract";
 import { evaluateBots } from "../src/engine/robots";
 
-const site = (file: string) => readFileSync(join(__dirname, "..", "fixture-site", file), "utf8");
+const site = (file: string) => readFileSync(join(__dirname, "..", "site", "fixture", file), "utf8");
 
 function input(html: string, overrides: { [K in keyof ChecksInput]?: ChecksInput[K] } = {}): ChecksInput {
   return {

@@ -30,7 +30,7 @@ pnpm build
 node dist/cli.js https://example.com
 ```
 
-The fixture site in `fixture-site/` has one deliberately broken page per failure class. If you change a check, add or adjust a fixture so the self-check workflow keeps proving it.
+The site in `site/` is published to GitHub Pages: `site/index.html` is the landing page and `site/fixture/` has one deliberately broken page per failure class. If you change a check, add or adjust a fixture so the self-check workflow keeps proving it.
 
 ## Scope
 

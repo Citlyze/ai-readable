@@ -8,6 +8,8 @@ Disallow: /
 
 # Blocking a search-index bot removes the path from ChatGPT search.
 User-agent: OAI-SearchBot
-Disallow: /blocked/
+Disallow: /fixture/blocked/
 
 Sitemap: https://citlyze.github.io/ai-readable/sitemap.xml
+
+# The pages under /fixture/ are deliberately broken demos for the self-check workflow.
