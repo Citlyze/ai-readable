@@ -10,7 +10,7 @@ export { compareStaticVsRendered, WORD_RATIO_WARN, WORD_RATIO_FAIL } from "./eng
 export type { RenderGap, GapStatus } from "./engine/gap";
 export { evaluateBots, sitemapsIn } from "./engine/robots";
 export type { BotVerdict } from "./engine/robots";
-export { fetchText, normalizeUrl, USER_AGENT } from "./engine/fetch";
+export { fetchText, normalizeUrl, sameOrigin, USER_AGENT } from "./engine/fetch";
 export type { FetchResult, FetchOptions } from "./engine/fetch";
 export { renderPage, RENDER_HINT } from "./engine/render";
 export { diffReports, DEFAULT_RULES } from "./cli/diff";

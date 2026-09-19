@@ -41,7 +41,8 @@ export async function runCi(flags: CiFlags): Promise<CiOutcome> {
 
   const baseline = await readBaseline();
   const results: { result: DiffResult; report: PageReport }[] = [];
-  const nextPages: Record<string, PageSummary> = { ...(baseline?.pages ?? {}) };
+  // Only the configured targets: pages removed from the config leave the baseline and the badge.
+  const nextPages: Record<string, PageSummary> = {};
 
   for (const target of targets) {
     if (!flags.json) process.stderr.write(pc.dim(`checking ${target.url}${render ? " (with render)" : ""}…\n`));
@@ -53,6 +54,8 @@ export async function runCi(flags: CiFlags): Promise<CiOutcome> {
     if (!flags.json) process.stdout.write(`${renderDiffTerminal(result, report)}\n`);
     if (report.renderError && render && !flags.json) process.stderr.write(pc.yellow(`  render skipped: ${report.renderError}\n`));
     if (!report.fetchError) nextPages[target.key] = summarize(report);
+    else if (baseline?.pages[target.key]) nextPages[target.key] = baseline.pages[target.key];
+    if (report.renderError && render) await annotate("warning", `${target.key}: rendered comparison skipped: ${report.renderError}`);
   }
 
   const failed = flags.failOn === "never" ? false : results.some((r) => r.result.failed);

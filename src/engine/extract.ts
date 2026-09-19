@@ -63,7 +63,11 @@ export function ldTypeValues(json: string): string[] {
       if (value && typeof value === "object") visit(value);
     }
   };
-  visit(parsed);
+  try {
+    visit(parsed);
+  } catch {
+    // Pathologically nested JSON-LD: keep what was collected.
+  }
   return types;
 }
 

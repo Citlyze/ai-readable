@@ -1,7 +1,7 @@
 import { BOTS, type Bot } from "./bots";
 import { runChecks, type Check } from "./checks";
 import { extractPageFacts, type PageFacts } from "./extract";
-import { fetchText, normalizeUrl } from "./fetch";
+import { fetchText, normalizeUrl, type FetchResult } from "./fetch";
 import { compareStaticVsRendered, type RenderGap } from "./gap";
 import { renderPage } from "./render";
 import { evaluateBots, sitemapsIn, type BotVerdict } from "./robots";
@@ -65,26 +65,51 @@ function toRow(verdict: BotVerdict): BotRow {
   };
 }
 
+function isHtml(result: FetchResult): boolean {
+  return /text\/html|application\/xhtml/i.test(result.contentType) || /^\s*<(!doctype|html)/i.test(result.text);
+}
+
+/** A robots.txt only counts when the server returned a plain-text body, not an HTML fallback page. */
+function robotsBody(result: FetchResult): string | null {
+  if (!result.ok || isHtml(result)) return null;
+  return result.text;
+}
+
+function llmsBody(result: FetchResult): string | null {
+  if (!result.ok || isHtml(result)) return null;
+  return result.text;
+}
+
 /** Audit one URL: page + robots.txt + llms.txt in parallel, optional render. */
 export async function auditUrl(input: string, options: AuditOptions = {}): Promise<PageReport> {
   const url = normalizeUrl(input);
-  const origin = new URL(url).origin;
   const timeoutMs = options.timeoutMs ?? 8000;
   const headers = options.headers;
+  const sidecar = { timeoutMs: Math.min(timeoutMs, 5000), maxBytes: SIDECAR_MAX_BYTES, headers };
 
-  const [page, robots, llms] = await Promise.all([
+  const origin = new URL(url).origin;
+  let [page, robots, llms] = await Promise.all([
     fetchText(url, { timeoutMs, maxBytes: PAGE_MAX_BYTES, headers }),
-    fetchText(`${origin}/robots.txt`, { timeoutMs: Math.min(timeoutMs, 5000), maxBytes: SIDECAR_MAX_BYTES, headers }),
-    fetchText(`${origin}/llms.txt`, { timeoutMs: Math.min(timeoutMs, 5000), maxBytes: SIDECAR_MAX_BYTES, headers }),
+    fetchText(`${origin}/robots.txt`, sidecar),
+    fetchText(`${origin}/llms.txt`, sidecar),
   ]);
 
-  const robotsTxt =
-    robots.ok && /text\/plain|text\/html|^$/.test(robots.contentType.split(";")[0].trim())
-      ? robots.text
-      : null;
-  const llmsTxt = llms.ok && !/text\/html/.test(llms.contentType) ? llms.text : null;
-
+  // The page may have redirected to another host (apex to www, http to
+  // https on a different domain). robots.txt belongs to the final origin.
   const finalUrl = page.finalUrl || url;
+  const finalOrigin = new URL(finalUrl).origin;
+  if (finalOrigin !== origin) {
+    // Custom headers were scoped to the original origin; do not carry them over.
+    const crossSidecar = { ...sidecar, headers: undefined };
+    [robots, llms] = await Promise.all([
+      fetchText(`${finalOrigin}/robots.txt`, crossSidecar),
+      fetchText(`${finalOrigin}/llms.txt`, crossSidecar),
+    ]);
+  }
+
+  const robotsTxt = robotsBody(robots);
+  const llmsTxt = llmsBody(llms);
+
   const facts = extractPageFacts(page.text);
   const verdicts = evaluateBots(robotsTxt, finalUrl, options.bots ?? BOTS);
   const { score, checks } = runChecks({
@@ -99,7 +124,9 @@ export async function auditUrl(input: string, options: AuditOptions = {}): Promi
   let gap: RenderGap | null = null;
   let renderError: string | null = null;
   if (options.render && !page.error) {
-    const rendered = await renderPage(finalUrl, { headers });
+    // Same-origin rule as the fetch: headers only when the final URL kept the origin.
+    const renderHeaders = finalOrigin === origin ? headers : undefined;
+    const rendered = await renderPage(finalUrl, { headers: renderHeaders });
     if (rendered.html) gap = compareStaticVsRendered(facts, extractPageFacts(rendered.html));
     else renderError = rendered.error;
   }

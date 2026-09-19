@@ -9,11 +9,12 @@
 import { execFile } from "node:child_process";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { promisify } from "node:util";
 
 const exec = promisify(execFile);
 const render = process.argv.includes("--render");
-const root = new URL("..", import.meta.url).pathname;
+const root = fileURLToPath(new URL("..", import.meta.url));
 const cli = join(root, "dist", "cli.js");
 const sites = JSON.parse(await readFile(join(root, "examples", "sites.json"), "utf8"));
 

@@ -128,7 +128,7 @@ export function diffReports(
       if (!previous || status === "info") continue;
       const worse = STATUS_RANK[status] > STATUS_RANK[previous];
       const better = STATUS_RANK[status] < STATUS_RANK[previous];
-      if (worse && rules.checkRegression && id !== "indexable") {
+      if (worse && rules.checkRegression && (id !== "indexable" || !rules.indexable)) {
         regressions.push({
           rule: "checkRegression",
           severity: "fail",

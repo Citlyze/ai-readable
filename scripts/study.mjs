@@ -12,6 +12,7 @@
 import { execFile } from "node:child_process";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { promisify } from "node:util";
 
 const exec = promisify(execFile);
@@ -21,7 +22,7 @@ if (!listFile) {
   process.exit(2);
 }
 const render = rest.includes("--render");
-const cli = join(new URL("..", import.meta.url).pathname, "dist", "cli.js");
+const cli = join(fileURLToPath(new URL("..", import.meta.url)), "dist", "cli.js");
 const lines = (await readFile(listFile, "utf8")).split(/\r?\n/).map((l) => l.trim()).filter((l) => l && !l.startsWith("#"));
 
 process.stdout.write("url,builder,score,httpStatus,crawlerAccess,indexable,singleH1,answerBlocks,structuredData,staticWords,renderedWords,wordRatio,gapStatus,blockedRetrievalBots\n");

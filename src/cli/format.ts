@@ -84,13 +84,13 @@ export function renderTerminal(report: PageReport, options: { bots?: "all" | "re
     }
     lines.push(`  ${pc.underline(CATEGORY_INFO[category].label)} ${pc.dim(`· ${CATEGORY_INFO[category].consequence}`)}`);
     for (const bot of bots) {
-      const verdict = bot.allowed ? paint("allowed", "allowed") : paint("blocked", "blocked");
+      const verdict = bot.allowed ? paint("allowed", pad("allowed", 17)) : paint("blocked", pad("blocked", 17));
       const evidence = bot.allowed
         ? bot.rule
           ? pc.dim(`matched "${bot.rule}"`)
           : ""
         : pc.dim(`"${bot.rule}"${bot.line ? ` at robots.txt:${bot.line}` : ""}`);
-      lines.push(`    ${pad(bot.name, 22)} ${pad(bot.organization, 12)} ${pad(verdict, 17)} ${evidence}`);
+      lines.push(`    ${pad(bot.name, 22)} ${pad(bot.organization, 12)} ${verdict} ${evidence}`);
     }
   }
   if (!report.robotsTxt.found) lines.push(pc.dim("  No robots.txt, so every crawler is allowed by default."));

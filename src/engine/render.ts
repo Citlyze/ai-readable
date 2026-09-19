@@ -1,7 +1,7 @@
 import { createRequire } from "node:module";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
-import { USER_AGENT } from "./fetch";
+import { sameOrigin, USER_AGENT } from "./fetch";
 
 export type RenderResult = {
   html: string | null;
@@ -42,8 +42,10 @@ async function loadPlaywright(): Promise<PlaywrightModule | null> {
 
 /**
  * Load the page in headless Chromium and return the DOM after JavaScript ran.
- * Playwright is an optional peer dependency: when it is missing the result
- * carries a hint instead of throwing, so `--render` degrades to static-only.
+ * Custom headers (a preview bypass token, basic auth) are attached only to
+ * requests for the page's own origin; third-party scripts, fonts and
+ * analytics never see them. Playwright is an optional peer dependency: when
+ * it is missing the result carries a hint instead of throwing.
  */
 export async function renderPage(
   url: string,
@@ -53,21 +55,29 @@ export async function renderPage(
   if (!playwright) return { html: null, error: RENDER_HINT };
 
   const timeoutMs = options.timeoutMs ?? 30000;
+  const extra = options.headers ?? {};
   let browser: Awaited<ReturnType<PlaywrightModule["chromium"]["launch"]>> | null = null;
   try {
     browser = await playwright.chromium.launch({ headless: true });
     const context = await browser.newContext({
       userAgent: USER_AGENT,
-      extraHTTPHeaders: options.headers,
       viewport: { width: 1280, height: 900 },
+      javaScriptEnabled: true,
     });
-    const page = await context.newPage();
-    try {
-      await page.goto(url, { waitUntil: "networkidle", timeout: timeoutMs });
-    } catch {
-      // Sites with long-polling never reach networkidle; settle for "load".
-      await page.goto(url, { waitUntil: "load", timeout: timeoutMs });
+    if (Object.keys(extra).length) {
+      await context.route("**/*", async (route) => {
+        const request = route.request();
+        if (sameOrigin(request.url(), url)) {
+          await route.continue({ headers: { ...request.headers(), ...extra } });
+        } else {
+          await route.continue();
+        }
+      });
     }
+    const page = await context.newPage();
+    await page.goto(url, { waitUntil: "load", timeout: timeoutMs });
+    // Sites with long-polling never reach networkidle; do not fail on that.
+    await page.waitForLoadState("networkidle", { timeout: Math.min(timeoutMs, 10000) }).catch(() => undefined);
     // Give client-side routers a beat to paint.
     await page.waitForTimeout(500);
     const html = await page.content();
@@ -77,7 +87,7 @@ export async function renderPage(
     if (/Executable doesn't exist|browserType.launch/i.test(message)) {
       return { html: null, error: "Chromium is not installed. Run: npx playwright install chromium" };
     }
-    return { html: null, error: message.split("\n")[0] };
+    return { html: null, error: message.split("\n")[0].slice(0, 200) };
   } finally {
     await browser?.close().catch(() => undefined);
   }

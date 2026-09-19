@@ -43,7 +43,10 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add .ai-readable
-          git diff --staged --quiet || git commit -m "chore: refresh ai-readable baseline" && git push
+          if ! git diff --staged --quiet; then
+            git commit -m "chore: refresh ai-readable baseline"
+            git push
+          fi
 `;
 }
 
