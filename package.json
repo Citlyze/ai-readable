@@ -81,5 +81,10 @@
     "tsx": "^4.20.0",
     "typescript": "^5.9.0",
     "vitest": "^5.0.1"
+  },
+  "pnpm": {
+    "overrides": {
+      "esbuild": ">=0.28.1"
+    }
   }
 }

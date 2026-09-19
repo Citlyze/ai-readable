@@ -2,6 +2,10 @@
 
 Everything in this file needs the GitHub or npm web UI, or a maintainer account. The repository itself is ready; these are the switches around it.
 
+## Status
+
+Applied by `scripts/github-setup.sh` on 2026-09-19: repository created, description, website, 20 topics, Discussions, Pages (Actions source, live at citlyze.github.io/ai-readable), labels, security features, branch protection, six starter issues. Still by hand: social preview upload, first release with the Marketplace box, `NPM_TOKEN`, the `v1` tag, pinning on the org profile.
+
 ## Repository settings (github.com/Citlyze/ai-readable)
 
 - **Description:** `See what each AI crawler actually gets from your pages. Fail CI when a deploy makes a page unreadable to AI search.`
