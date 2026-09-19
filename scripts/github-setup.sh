@@ -82,7 +82,7 @@ label "help wanted" "008672" "Maintainers would welcome a pull request"
 say "branch protection"
 gh api -X PUT "repos/$FULL/branches/main/protection" --input - <<'EOF' >/dev/null 2>&1 || echo "   protection: push main first, then re-run"
 {
-  "required_status_checks": {"strict": true, "contexts": ["test (20)", "test (22)"]},
+  "required_status_checks": {"strict": false, "contexts": ["test (20)", "test (22)"]},
   "enforce_admins": false,
   "required_pull_request_reviews": null,
   "restrictions": null,
