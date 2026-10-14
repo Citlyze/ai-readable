@@ -1,0 +1,7 @@
+# Settings live here rather than in package.json's "pnpm" field: Dependabot's
+# pnpm ignored that field, rebuilt the lockfile without this override and
+# pulled esbuild back to 0.27 (PR #8, 2026-10-03), which CI then refused.
+overrides:
+  # GHSA-g7r4-m6w7-qqqr (dev-server file read), fixed in 0.28.1. Reached
+  # through tsup and vite.
+  esbuild: ">=0.28.1"

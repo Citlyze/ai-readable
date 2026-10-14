@@ -12,6 +12,10 @@ updates:
       # TypeScript majors change the compiler; bump them by hand with the tsup dts build checked.
       - dependency-name: typescript
         update-types: ["version-update:semver-major"]
+      # Types track the oldest Node the package supports (engines), so a newer
+      # major would let code use APIs that Node lacks.
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: github-actions
     directory: /
     schedule:
