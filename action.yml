@@ -89,7 +89,7 @@ runs:
         else
           pkgs=("ai-readable@$INPUT_VERSION")
           # Exact version: the one this repository's lockfile tests against (a test keeps them equal).
-          [ "$INPUT_RENDER" = "true" ] && pkgs+=("playwright@1.63.0")
+          [ "$INPUT_RENDER" = "true" ] && pkgs+=("playwright@1.64.1")
           npm install --prefix "$prefix" --no-audit --no-fund --no-package-lock "${pkgs[@]}"
           if [ "$INPUT_RENDER" = "true" ]; then
             "$prefix/node_modules/.bin/playwright" install --with-deps chromium
