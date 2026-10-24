@@ -133,6 +133,50 @@ describe("renderPage header scoping", () => {
       await third.close();
     }
   }, 60000);
+
+  it("keeps headers on same-origin redirects and drops them when a same-origin request redirects to another origin", async () => {
+    const { renderPage } = await import("../src/engine/render");
+    const svg = { body: "<svg xmlns='http://www.w3.org/2000/svg'/>", type: "image/svg+xml" };
+    const third = await serveDir(ROOT, { bodies: { "/collected.svg": svg } });
+    const app = await serveDir(ROOT, {
+      redirects: { "/img": `${third.url}/collected.svg`, "/logo": "/logo.svg" },
+      bodies: {
+        "/logo.svg": svg,
+        "/page": {
+          body: `<!doctype html><html><head><title>Redirect test page</title></head><body><h1>Redirect test</h1><img src="/img"><img src="/logo"></body></html>`,
+        },
+      },
+    });
+    try {
+      const result = await renderPage(`${app.url}/page`, { headers: SECRET });
+      expect(result.error).toBeNull();
+      expect(result.html).toContain("Redirect test");
+      const own = app.requests.filter((r) => ["/page", "/img", "/logo", "/logo.svg"].includes(r.url ?? ""));
+      expect(own.map((r) => r.url).sort()).toEqual(["/img", "/logo", "/logo.svg", "/page"]);
+      expect(own.every((r) => r.headers["x-preview-bypass"] === "s3cret")).toBe(true);
+      const collected = third.requests.filter((r) => r.url === "/collected.svg");
+      expect(collected.length).toBeGreaterThan(0);
+      expect(collected.every((r) => r.headers["x-preview-bypass"] === undefined)).toBe(true);
+    } finally {
+      await app.close();
+      await third.close();
+    }
+  }, 60000);
+
+  it("drops headers when the page itself redirects to another origin", async () => {
+    const { renderPage } = await import("../src/engine/render");
+    const app = await serveDir(ROOT, { redirects: { "/away": `${other.url}/fixture/` } });
+    try {
+      const before = other.requests.length;
+      const result = await renderPage(`${app.url}/away`, { headers: SECRET });
+      expect(result.error).toBeNull();
+      const landed = other.requests.slice(before).filter((r) => r.url === "/fixture/");
+      expect(landed.length).toBeGreaterThan(0);
+      expect(landed.every((r) => r.headers["x-preview-bypass"] === undefined)).toBe(true);
+    } finally {
+      await app.close();
+    }
+  }, 60000);
 });
 
 describe("fetchText error messages", () => {

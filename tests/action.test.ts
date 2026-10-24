@@ -30,4 +30,13 @@ describe("action.yml", () => {
     // `secrets` and `env` are not available to action metadata; `github`, `inputs`, `steps`, `runner` are.
     for (const context of contexts) expect(["github", "inputs", "steps", "runner"]).toContain(context);
   });
+
+  it("installs the exact Playwright version the lockfile tests against", () => {
+    const pins = lines.flatMap((line) => [...line.matchAll(/"playwright@([^"]+)"/g)].map((m) => m[1]));
+    expect(pins).toHaveLength(1);
+    const lock = readFileSync(join(__dirname, "..", "pnpm-lock.yaml"), "utf8");
+    const locked = /\n {6}playwright:\n {8}specifier: [^\n]+\n {8}version: ([^\s(]+)/.exec(lock)?.[1];
+    expect(locked).toMatch(/^\d+\.\d+\.\d+$/);
+    expect(pins[0]).toBe(locked);
+  });
 });

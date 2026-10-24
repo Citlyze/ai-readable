@@ -34,7 +34,7 @@ inputs:
   version:
     description: "ai-readable npm version to run. Bumped with every release so @v1 tracks the latest 0.x/1.x."
     required: false
-    default: "0.1.2"
+    default: "0.1.3"
   source:
     description: "'npm' (default) installs the published package; 'local' builds the checked-out action itself. 'local' is for this repository's own self-check."
     required: false
@@ -88,7 +88,8 @@ runs:
           fi
         else
           pkgs=("ai-readable@$INPUT_VERSION")
-          [ "$INPUT_RENDER" = "true" ] && pkgs+=("playwright@1")
+          # Exact version: the one this repository's lockfile tests against (a test keeps them equal).
+          [ "$INPUT_RENDER" = "true" ] && pkgs+=("playwright@1.63.0")
           npm install --prefix "$prefix" --no-audit --no-fund --no-package-lock "${pkgs[@]}"
           if [ "$INPUT_RENDER" = "true" ]; then
             "$prefix/node_modules/.bin/playwright" install --with-deps chromium

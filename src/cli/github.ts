@@ -55,12 +55,40 @@ async function api<T>(ctx: GitHubContext, method: string, path: string, body?: u
   return (await response.json()) as T;
 }
 
-/** Create or update the single ai-readable comment on the pull request. */
+type IssueComment = { id: number; body?: string; user?: { login?: string; type?: string } | null };
+
+const COMMENT_PAGES = 10;
+
+/**
+ * Login the token acts as. The Actions GITHUB_TOKEN cannot read /user, so
+ * null there; its comments are posted by a Bot account.
+ */
+async function tokenLogin(ctx: GitHubContext): Promise<string | null> {
+  try {
+    return (await api<{ login?: string }>(ctx, "GET", "/user")).login ?? null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Create or update the single ai-readable comment on the pull request. Only
+ * a comment this token could have written counts as ours: anyone can paste
+ * the marker into a comment, and editing theirs would put our report under
+ * their name.
+ */
 export async function upsertPrComment(ctx: GitHubContext, body: string): Promise<"created" | "updated" | "skipped"> {
   if (ctx.prNumber === null) return "skipped";
   const base = `/repos/${ctx.repository}/issues/${ctx.prNumber}/comments`;
-  const comments = await api<{ id: number; body?: string }[]>(ctx, "GET", `${base}?per_page=100`);
-  const existing = comments.find((c) => c.body?.includes(COMMENT_MARKER));
+  const login = await tokenLogin(ctx);
+  const ours = (c: IssueComment) =>
+    Boolean(c.body?.includes(COMMENT_MARKER)) && (login ? c.user?.login === login : c.user?.type === "Bot");
+  let existing: IssueComment | undefined;
+  for (let page = 1; page <= COMMENT_PAGES && !existing; page += 1) {
+    const comments = await api<IssueComment[]>(ctx, "GET", `${base}?per_page=100&page=${page}`);
+    existing = comments.find(ours);
+    if (comments.length < 100) break;
+  }
   if (existing) {
     await api(ctx, "PATCH", `/repos/${ctx.repository}/issues/comments/${existing.id}`, { body });
     return "updated";

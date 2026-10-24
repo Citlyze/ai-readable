@@ -68,6 +68,12 @@ describe("evaluateBots", () => {
     expect(sitemapsIn(ROBOTS, "https://example.com/")).toEqual(["https://example.com/sitemap.xml"]);
     expect(sitemapsIn(null, "https://example.com/")).toEqual([]);
   });
+
+  it("strips control characters from the quoted rule", () => {
+    const gpt = byName(evaluateBots("User-agent: GPTBot\nDisallow: / # \u001b[2J\n", "https://example.com/x"), "GPTBot");
+    expect(gpt.allowed).toBe(false);
+    expect(gpt.rule).toBe("Disallow: / # [2J");
+  });
 });
 
 describe("bot registry", () => {

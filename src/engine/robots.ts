@@ -1,5 +1,6 @@
 import robotsParser from "robots-parser";
 import { BOTS, type Bot } from "./bots";
+import { stripControl } from "./text";
 
 export type BotVerdict = {
   bot: Bot;
@@ -20,7 +21,7 @@ type Parsed = ReturnType<typeof robotsParser>;
 function lineText(robotsTxt: string, line: number): string | null {
   if (line < 1) return null;
   const text = robotsTxt.split(/\r?\n/)[line - 1];
-  return text === undefined ? null : text.trim();
+  return text === undefined ? null : stripControl(text).trim();
 }
 
 /**

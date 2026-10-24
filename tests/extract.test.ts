@@ -64,6 +64,21 @@ describe("extractPageFacts", () => {
     expect(facts.tables).toBe(1);
     expect(facts.listItems).toBe(3);
   });
+
+  it("strips terminal control characters from page text", () => {
+    const hostile = extractPageFacts(
+      `<html lang="en&#27;[2J"><head><title>Hi&#27;]0;owned&#7;</title><meta name="description" content="a\u009b31mb"></head>` +
+        `<body><h1>A&#27;[2J title</h1><h2>Why&#127;?</h2><script type="application/ld+json">{"@type":"Product\\u001b[31m"}</script></body></html>`,
+    );
+    const text = JSON.stringify(hostile);
+    expect(text).not.toMatch(/\\u00(0[0-8]|1[b-f]|7f|9b)|[\u0000-\u0008\u001b\u007f-\u009f]/);
+    expect(hostile.title).toBe("Hi]0;owned");
+    expect(hostile.h1s).toEqual(["A[2J title"]);
+    expect(hostile.subheadings).toEqual(["Why?"]);
+    expect(hostile.metaDescription).toBe("a31mb");
+    expect(hostile.ldTypes).toEqual(["product[31m"]);
+    expect(hostile.lang).toBe("en[2J");
+  });
 });
 
 describe("ldTypeValues", () => {

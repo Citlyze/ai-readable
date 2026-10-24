@@ -13,6 +13,8 @@ export const RENDER_HINT =
 
 type PlaywrightModule = typeof import("playwright");
 
+const MAX_REDIRECTS = 5;
+
 let cached: Promise<PlaywrightModule | null> | null = null;
 
 /**
@@ -58,19 +60,50 @@ export async function renderPage(
   const extra = options.headers ?? {};
   let browser: Awaited<ReturnType<PlaywrightModule["chromium"]["launch"]>> | null = null;
   try {
-    browser = await playwright.chromium.launch({ headless: true });
+    const scoped = Object.keys(extra).length > 0;
+    browser = await playwright.chromium.launch({
+      headless: true,
+      // With custom headers, own-origin responses are fulfilled from Node (see
+      // the route below). Chromium cannot tell which address space a fulfilled
+      // document came from, so its local-network checks would block a
+      // localhost page from loading its other localhost services.
+      args: scoped ? ["--disable-features=LocalNetworkAccessChecks"] : [],
+    });
     const context = await browser.newContext({
       userAgent: USER_AGENT,
       viewport: { width: 1280, height: 900 },
       javaScriptEnabled: true,
     });
-    if (Object.keys(extra).length) {
+    if (scoped) {
       await context.route("**/*", async (route) => {
         const request = route.request();
-        if (sameOrigin(request.url(), url)) {
-          await route.continue({ headers: { ...request.headers(), ...extra } });
-        } else {
+        if (!sameOrigin(request.url(), url)) {
           await route.continue();
+          return;
+        }
+        // route.continue({ headers }) carries the headers onto every redirect
+        // the request triggers, including one to another origin. Fetch each
+        // hop here with redirects off instead. Same-origin hops of a
+        // subresource are followed here with the headers; any other redirect
+        // goes back to the browser, which follows it without them (a hop the
+        // browser follows is not routed again). That drops the headers on a
+        // same-origin redirect of a navigation, which is rare here: callers
+        // render the URL the static fetch already resolved.
+        const headers = { ...request.headers(), ...extra };
+        try {
+          let target = request.url();
+          for (let hop = 0; ; hop += 1) {
+            const response = await route.fetch({ url: target, headers, maxRedirects: 0 });
+            const location = response.status() >= 300 && response.status() < 400 ? response.headers().location : undefined;
+            const next = location ? new URL(location, target).toString() : null;
+            if (!next || !sameOrigin(next, url) || request.isNavigationRequest() || hop >= MAX_REDIRECTS) {
+              await route.fulfill({ response });
+              return;
+            }
+            target = next;
+          }
+        } catch {
+          await route.abort().catch(() => undefined);
         }
       });
     }

@@ -1,6 +1,6 @@
 {
   "name": "ai-readable",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "See what each AI crawler actually gets from your pages, and fail CI when a deploy makes a page unreadable to AI search.",
   "license": "MIT",
   "type": "module",
@@ -80,6 +80,7 @@
     "tsup": "^8.5.1",
     "tsx": "^4.23.15",
     "typescript": "^5.9.0",
+    "vite": "^8.3.5",
     "vitest": "^5.0.3"
   },
   "packageManager": "pnpm@10.34.6"

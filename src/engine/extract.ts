@@ -1,4 +1,5 @@
 import * as cheerio from "cheerio";
+import { stripControl } from "./text";
 
 /** A direct answer under a heading: long enough to say something, short enough to lift. */
 export const ANSWER_MIN_WORDS = 25;
@@ -35,7 +36,7 @@ export function words(text: string): number {
 }
 
 function collapse(value: string | null | undefined): string {
-  return (value ?? "").replace(/\s+/g, " ").trim();
+  return stripControl(value ?? "").replace(/\s+/g, " ").trim();
 }
 
 /** Every @type in a JSON-LD document, including nested nodes and @graph. */
@@ -55,9 +56,9 @@ export function ldTypeValues(json: string): string[] {
     if (!node || typeof node !== "object") return;
     const record = node as Record<string, unknown>;
     const type = record["@type"];
-    if (typeof type === "string") types.push(type.toLowerCase());
+    if (typeof type === "string") types.push(stripControl(type).toLowerCase());
     else if (Array.isArray(type)) {
-      for (const t of type) if (typeof t === "string") types.push(t.toLowerCase());
+      for (const t of type) if (typeof t === "string") types.push(stripControl(t).toLowerCase());
     }
     for (const value of Object.values(record)) {
       if (value && typeof value === "object") visit(value);
@@ -97,8 +98,8 @@ export function extractPageFacts(html: string): PageFacts {
     for (const type of ldTypeValues($(el).text())) ldTypes.add(type);
   });
 
-  const canonical = $('link[rel="canonical"]').attr("href")?.trim() || null;
-  const lang = $("html").attr("lang")?.trim() || null;
+  const canonical = stripControl($('link[rel="canonical"]').attr("href") ?? "").trim() || null;
+  const lang = stripControl($("html").attr("lang") ?? "").trim() || null;
 
   // Only genuinely non-content elements. Keep <header>: many templates put
   // the page H1 inside one.
@@ -132,8 +133,8 @@ export function extractPageFacts(html: string): PageFacts {
 
   return {
     title: collapse($("title").first().text()),
-    metaDescription: ($('meta[name="description"]').attr("content") ?? "").trim(),
-    robotsMeta: ($('meta[name="robots"]').attr("content") ?? "").toLowerCase(),
+    metaDescription: stripControl($('meta[name="description"]').attr("content") ?? "").trim(),
+    robotsMeta: stripControl($('meta[name="robots"]').attr("content") ?? "").toLowerCase(),
     h1s,
     subheadings,
     answerBlocks,
